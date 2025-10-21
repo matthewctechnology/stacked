@@ -22,4 +22,4 @@ Stacked - A Monorepo
 `critique` app
 - `cd critique`
 - `npm run dev`
-- `<codespace>-3000.app.github.dev`
+- `<codespace_id>-3000.app.github.dev`
