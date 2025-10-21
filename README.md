@@ -1,2 +1,25 @@
 # stacked
 Stacked - A Monorepo
+
+## Overview
+
+`stacked` is a monorepo for personal portfolio project(s).
+
+`critique` contains a web application that allows users to prompt an AI agent to critique a creative idea so they can get feedback on a proposal, such as, objectively if the idea is novel, viable, or valuable.
+
+## Libraries and Frameworks
+
+- TypeScript
+- NextJS
+- TailwindCSS
+- NodeJS
+- ESLint
+- Jest
+- SuperTest
+
+## Quickstart
+
+`critique` app
+- `cd critique`
+- `npm run dev`
+- `<codespace>-3000.app.github.dev`
