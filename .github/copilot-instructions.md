@@ -46,6 +46,7 @@ The AI Web Application will allow users to prompt an agent to critique a creativ
 - Inputs should be reviewed for temprature and submit button disabled for high temprature text in the input field
 
 ## Expectations
+
 - Do not search the public internet
 - Do not view, edit, or store any personal information
 - Do not go beyond the provided context
