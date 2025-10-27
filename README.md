@@ -15,6 +15,7 @@ Stacked - A Monorepo
 - NodeJS
 - ESLint
 - Jest
+- React Testing Library
 - SuperTest
 
 ## Quickstart
