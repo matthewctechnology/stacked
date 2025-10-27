@@ -5,7 +5,7 @@ export default function Home() {
         <ul className="font-mono list-inside text-sm/6 text-center sm:text-left">
           <li className="mb-2">
             <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              thinking...
+              thinking..
             </code>
           </li>
         </ul>
