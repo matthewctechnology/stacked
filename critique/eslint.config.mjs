@@ -21,7 +21,7 @@ const eslintConfig = defineConfig([
       "build/**",
       "next-env.d.ts",
     ],
-    files: ['**/*.js', '**/*.jsx', '**/*.ts', , '**/*.tsx'],
+    files: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx'],
     languageOptions: {
       globals: {
         ...globals.browser,
