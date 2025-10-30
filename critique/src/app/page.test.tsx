@@ -1,6 +1,8 @@
 import { describe, expect, test } from '@jest/globals';
 import Home from './page';
 import { fireEvent, render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
 
 describe('Home', () => {
 
@@ -20,13 +22,13 @@ describe('Home', () => {
     expect(received).toEqual(expected);
   });
 
-  test('should display thinking while typing', (): void => {
+  test('should display thinking while typing', async (): Promise<void> => {
     render(<Home />);
     const expected = 'greater than 0';
     const respected = 'thinking...';
     const unexpected = ' ';
     const inputField = screen.getByPlaceholderText('enter an idea');
-    fireEvent.change(inputField, { target: { value: expected } });
+    await userEvent.type(inputField, expected);
     inputField.textContent = expected;
     const received = screen.getByText(expected).textContent;
 
