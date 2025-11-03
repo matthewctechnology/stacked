@@ -5,9 +5,9 @@ on:
     branches:
       - main
 jobs:
-  environment:
-    name: CRITIQUE-TEST
-  build:
+  test:
+    environment:
+      name: CRITIQUE-TEST
     runs-on: ubuntu-latest
     steps:
       - name: Checkout critique
