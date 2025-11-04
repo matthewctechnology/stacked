@@ -1,4 +1,3 @@
-# critque-test action
 name: critique-test
 on:
   pull_request:
