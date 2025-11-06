@@ -41,5 +41,14 @@ jobs:
         uses: actions/upload-pages-artifact@v4
         with:
           path: ./out
+      - name: Check output
+        run: |
+          if [ ! -d "./out" ]; then
+            echo "Error: ./out directory not found. Build may have failed."
+            exit 1
+          fi
+      # lists build outputs - remove after deploy tests
+      - name: List output
+        run: ls -l ./out
       - name: Deploy critique
         uses: actions/deploy-pages@v4
