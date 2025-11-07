@@ -56,6 +56,5 @@ jobs:
         uses: actions/upload-pages-artifact@v4
         with:
           path: ./critique/out
-          name: critique-prod
       - name: Deploy critique
         uses: actions/deploy-pages@v4
