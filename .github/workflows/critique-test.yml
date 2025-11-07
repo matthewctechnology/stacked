@@ -31,5 +31,11 @@ jobs:
         run: npm ci
       - name: Build critique
         run: npm run build --if-present
+      - name: Check output
+        run: |
+          if [ ! -d './out' ]; then
+            echo 'Error: ./out directory not found. Build may have failed.'
+            exit 1
+          fi
       - name: Test critique
         run: npm test
