@@ -27,17 +27,6 @@ jobs:
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
-      # removes old cache - remove after test
-      - name: Check output
-        run: |
-          if [ -d './critique/.next/cache' ]; then
-            echo 'Error: .critique/.next/cache directory found.'
-            rm -rf ./critique/.next/cache
-            echo 'Error: .critique/.next/cache directory removed.'
-          fi
-      - name: List cache
-        run: ls ./.next/cache
-      # ^^^
       - name: Install critique
         run: npm ci
       - name: Build critique
