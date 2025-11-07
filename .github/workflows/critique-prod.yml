@@ -43,9 +43,6 @@ jobs:
             echo "Error: ./out directory not found. Build may have failed."
             exit 1
           fi
-      # lists build outputs - remove after deploy tests
-      - name: List output
-        run: ls -l ./out
       - name: Upload critique
         uses: actions/upload-pages-artifact@v4
         with:

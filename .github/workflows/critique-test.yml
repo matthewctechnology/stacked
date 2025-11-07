@@ -22,5 +22,15 @@ jobs:
         run: npm ci
       - name: Build critique
         run: npm run build --if-present
+      # lists build outputs - remove after deploy tests
+      - name: List pwd
+        run: pwd
+      - name: List wd
+        run: ls -l ./
+      - name: List output
+        run: ls -l ./out
+      - name: List critique
+        run: ls -l ./critique/out
+      # ^^^
       - name: Test critique
         run: npm test
