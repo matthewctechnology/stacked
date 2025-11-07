@@ -31,6 +31,15 @@ jobs:
         uses: actions/configure-pages@v5
         with:
           static_site_generator: next
+      - name: Cache critique
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            ./critique/.next/cache
+          key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
       - name: Install critique
         run: npm ci
       - name: Build critique
