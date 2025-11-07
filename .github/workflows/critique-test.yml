@@ -27,6 +27,10 @@ jobs:
           key: ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
           restore-keys: |
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
+      # lists cache - remove after deploy tests
+      - name: List cache
+        run: ls ./.next/cache
+      # ^^^
       - name: Install critique
         run: npm ci
       - name: Build critique
