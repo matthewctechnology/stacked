@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-  # activates manual deploys - remove after deploy tests
   workflow_dispatch:
 permissions:
   contents: read
