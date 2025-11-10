@@ -44,9 +44,9 @@ jobs:
         run: |
           set -e
           export FILE=$(find ./out -name '*.html' | head -n 1)
-          echo 'Logging before rewrite: $FILE'
-          cat '$FILE'
-          export FILE=''
+          echo "Logging before rewrite: $FILE"
+          cat "$FILE"
+          export FILE=""
       - name: Rewrite paths
         run: |
           find ./out -name '*.html' -exec sed -i 's|"/_next/|"/critique/_next/|g' {} +
@@ -54,8 +54,8 @@ jobs:
         run: |
           set -e
           export FILE=$(find ./out -name '*.html' | head -n 1)
-          echo 'Logging after rewrite: $FILE'
-          cat '$FILE'
-          export FILE=''
+          echo "Logging after rewrite: $FILE"
+          cat "$FILE"
+          export FILE=""
       - name: Test critique
         run: npm test
