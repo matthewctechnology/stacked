@@ -37,5 +37,25 @@ jobs:
             echo 'Error: ./out directory not found. Build may have failed.'
             exit 1
           fi
+      - name: Show files
+        run: |
+          ls ./out/_next
+      - name: Show unchanged
+        run: |
+          set -e
+          export FILE=$(find ./out -name '*.html' | head -n 1)
+          echo 'Logging before rewrite: $FILE'
+          cat '$FILE'
+          export FILE=''
+      - name: Rewrite paths
+        run: |
+          find ./out -name '*.html' -exec sed -i 's|"/_next/|"/critique/_next/|g' {} +
+      - name: Show changed
+        run: |
+          set -e
+          export FILE=$(find ./out -name '*.html' | head -n 1)
+          echo 'Logging after rewrite: $FILE'
+          cat '$FILE'
+          export FILE=''
       - name: Test critique
         run: npm test
