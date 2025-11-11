@@ -45,6 +45,8 @@ jobs:
         run: rm -rf ./out
       - name: Build critique
         run: npm run build --if-present
+        env:
+          GITHUB_PAGES: 'true'
       - name: Check output
         run: |
           if [ ! -d './out' ]; then
