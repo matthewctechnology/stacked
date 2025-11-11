@@ -39,6 +39,6 @@ jobs:
           fi
       - name: Rewrite paths
         run: |
-          find ./out -name '*.html' -exec sed -i 's|"/_next/|"/critique/_next/|g' {} +
+          find ./out -name '*.html' -exec sed -i 's|"/_next/|"/stacked/_next/|g' {} +
       - name: Test critique
         run: npm test
