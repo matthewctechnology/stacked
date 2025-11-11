@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - main
-  # activates manual deploys - remove after deploy tests
   workflow_dispatch:
 permissions:
   contents: read
@@ -50,6 +49,9 @@ jobs:
             echo 'Error: ./out directory not found. Build may have failed.'
             exit 1
           fi
+      - name: Rewrite paths
+        run: |
+          find ./out -name '*.html' -exec sed -i 's|"/_next/|"/critique/_next/|g' {} +
       - name: Test critique
         run: npm test
       - name: Upload critique
