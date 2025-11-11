@@ -29,6 +29,8 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
       - name: Install critique
         run: npm ci
+      - name: Clean output
+        run: rm -rf ./out
       - name: Build critique
         run: npm run build --if-present
       - name: Check output
@@ -37,8 +39,39 @@ jobs:
             echo 'Error: ./out directory not found. Build may have failed.'
             exit 1
           fi
-      - name: Rewrite paths
+      - name: List output
+        run: ls -1 ./out
+      - name: Check next
         run: |
-          find ./out -name '*.html' -exec sed -i 's|"/_next/|"/stacked/_next/|g' {} +
+          if [ ! -d './out/_next' ]; then
+            echo 'Error: ./out/_next directory not found.'
+            exit 1
+          fi
+      - name: List next
+        run: ls -1 ./out/_next
+      - name: Check static
+        run: |
+          if [ ! -d './out/_next/static' ]; then
+            echo 'Error: ./out/_next/static directory not found.'
+            exit 1
+          fi
+      - name: List static
+        run: ls -1 ./out/_next/static
+      - name: Check chunks
+        run: |
+          if [ ! -d './out/_next/static/chunks' ]; then
+            echo 'Error: ./out/_next/static/chunks directory not found.'
+            exit 1
+          fi
+      - name: List chunks
+        run: ls -1 ./out/_next/static/chunks
+      - name: Check media
+        run: |
+          if [ ! -d './out/_next/static/media' ]; then
+            echo 'Error: ./out/_next/static/media directory not found.'
+            exit 1
+          fi
+      - name: List media
+        run: ls -1 ./out/_next/static/media
       - name: Test critique
         run: npm test
