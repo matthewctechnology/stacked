@@ -1,12 +1,11 @@
 import { describe, expect, test } from '@jest/globals';
 import Home from '../../src/app/page';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 
 describe('Home', () => {
-
-  test('should display input field', (): void => {
+  test('should display input field', () => {
     render(<Home />);
     const expected = 'enter an idea';
     const received = screen.getByPlaceholderText(expected).getAttribute('placeholder');
@@ -14,7 +13,7 @@ describe('Home', () => {
     expect(received).toEqual(expected);
   });
 
-  test('should display sumbit button', (): void => {
+  test('should display submit button', () => {
     render(<Home />);
     const expected = 'submit';
     const received = screen.getByRole('button', { name: 'submit' }).textContent;
@@ -22,45 +21,53 @@ describe('Home', () => {
     expect(received).toEqual(expected);
   });
 
-  test('should display thinking while typing', async (): Promise<void> => {
+  test('should display thinking while loading', async () => {
     render(<Home />);
-    const expected = 'greater than 0';
-    const respected = 'thinking...';
-    const unexpected = ' ';
-    const inputField = screen.getByPlaceholderText('enter an idea');
-    await userEvent.type(inputField, expected);
-    inputField.textContent = expected;
-    const received = screen.getByText(expected).textContent;
-
-    expect(received).toEqual(expected);
-
-    const rereceived = screen.getByText(respected).textContent;
-
-    expect(rereceived).not.toEqual(unexpected);
-    expect(rereceived).toEqual(respected);
-  });
-
-  test('should toggle display message on click submit', (): void => {
-    render(<Home />);
-    const expected = 'message';
-    const respected = 'another message';
-    const unexpected = 'message another message';
     const inputField = screen.getByPlaceholderText('enter an idea');
     const button = screen.getByRole('button', { name: 'submit' });
 
-    inputField.textContent = expected;
+    await userEvent.type(inputField, 'my idea');
     fireEvent.click(button);
 
-    const received = screen.getByText(expected).textContent;
+    expect(screen.queryByText('thinking...')).not.toBeNull();
+    await waitFor(() => {
+      expect(screen.queryByText('thinking...')).toBeNull();
+    });
+  });
 
-    expect(received).toEqual(expected);
+  test('should display user and AI messages', async () => {
+    render(<Home />);
+    const inputField = screen.getByPlaceholderText('enter an idea');
+    const button = screen.getByRole('button', { name: 'submit' });
 
-    inputField.textContent = respected;
+    await userEvent.type(inputField, 'message');
     fireEvent.click(button);
 
-    const rereceived = screen.getByText(respected).textContent;
+    expect(screen.getByTestId('user').textContent).toBe('message');
+    await waitFor(() => {
+      expect(screen.getByTestId('ai')).not.toBeNull();
+    });
+  });
 
-    expect(rereceived).not.toEqual(unexpected);
-    expect(rereceived).toEqual(respected);
+  test('should clear chat and display new message on next submit', async () => {
+    render(<Home />);
+    const inputField = screen.getByPlaceholderText('enter an idea');
+    const button = screen.getByRole('button', { name: 'submit' });
+
+    await userEvent.type(inputField, 'first');
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('ai')).not.toBeNull();
+    });
+
+    await userEvent.clear(inputField);
+    await userEvent.type(inputField, 'second');
+    fireEvent.click(button);
+
+    expect(screen.getByTestId('user').textContent).toBe('second');
+    await waitFor(() => {
+      expect(screen.getByTestId('ai')).not.toBeNull();
+    });
   });
 });

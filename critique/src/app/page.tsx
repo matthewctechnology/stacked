@@ -1,53 +1,78 @@
-'use client'
+'use client';
 
-import { useState } from 'react';
+import { useEffect } from 'react';
+import { useChatReducer } from './useChatReducer';
 
 
 export function Chat() {
-  const [input, setInput] = useState('');
-  const [showThought, setShowThought] = useState(false);
-  const [showChat, setShowChat] = useState(false);
+  const { state, dispatch, simulateAIResponse } = useChatReducer();
 
-  const inputClick = () => {
-    if (showThought) {
-      setShowThought(!showThought);
-      setShowChat(!showChat)
-    }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({ type: 'INPUT_CHANGE', value: e.target.value });
   };
-  const submitClick = () => {
-    if (!showChat) {
-      setShowThought(!showThought);
-      setShowChat(!showChat);
-    }
+
+  const handleSubmit = () => {
+    if (!state.input.trim()) return;
+    dispatch({ type: 'SUBMIT' });
+
+    setTimeout(() => {
+      const aiReply = simulateAIResponse();
+      dispatch({ type: 'RESPONSE', value: aiReply });
+    }, 800);
   };
+
+  useEffect(() => {
+    if (state.messages.length > 2) {
+      dispatch({ type: 'RESET' });
+    }
+  }, [state.messages, dispatch]);
 
   return (
     <div>
-      {
-        input?.length === 0
-        && <p className="bg-black/[.05] font-mono font-semibold px-1 py-0.5 rounded"> </p>
-      }
-      {!showChat
-        && input?.length > 0
-        && <p className="bg-black/[.05] font-mono font-semibold px-1 py-0.5 rounded">
-          thinking...
+      {state.error && (
+        <p className="bg-red-100 text-red-700 font-mono font-semibold px-1 py-0.5 rounded">
+          {state.error}
         </p>
-      }
-      {showChat
-        && input?.length > 0
-        && <p className="bg-black/[.05] font-mono font-semibold px-1 py-0.5 rounded">
-          {input}
-        </p>
-      }
-      <input className="bg-black/[.05] font-mono font-semibold px-1 py-0.5 rounded"
-        onFocus={inputClick}
-        type='text'
+      )}
+
+      <div className="flex flex-col gap-2 mb-2">
+        {state.messages.map((msg, idx) => (
+          <p
+            key={idx}
+            className={
+              msg.role === 'user'
+                ? 'bg-blue-100 text-blue-900 font-mono font-semibold px-1 py-0.5 rounded self-end'
+                : 'bg-green-100 text-green-900 font-mono font-semibold px-1 py-0.5 rounded self-start'
+            }
+            data-testid={msg.role}
+          >
+            {msg.text}
+          </p>
+        ))}
+        {state.loading && (
+          <p className="bg-black/[.05] font-mono font-semibold px-1 py-0.5 rounded">
+            thinking...
+          </p>
+        )}
+      </div>
+
+      <input
+        className="bg-black/[.05] font-mono font-semibold px-1 py-0.5 rounded"
+        type="text"
         placeholder="enter an idea"
-        value={input}
-        onChange={(element) => setInput(element.target.value)}
+        value={state.input}
+        onChange={handleInputChange}
+        disabled={state.loading}
+        aria-label="idea-input"
       />
-      <button className="bg-black/[.05] font-mono font-semibold px-1 py-0.5 rounded"
-        onClick={submitClick}>submit</button>
+      <button
+        className="bg-black/[.05] font-mono font-semibold px-1 py-0.5 rounded ml-2"
+        onClick={handleSubmit}
+        disabled={state.loading || !state.input.trim()}
+        aria-label="submit"
+      >
+        submit
+      </button>
     </div>
   );
 }
