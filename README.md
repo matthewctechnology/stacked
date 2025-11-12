@@ -7,6 +7,10 @@ Stacked - A Monorepo
 
 `critique` contains a web application that allows users to prompt an AI agent to critique a creative idea so they can get feedback on a proposal, such as, objectively if the idea is novel, viable, or valuable.
 
+critique is hosted on GitHub Pages and can be browsed without a development environemnt.
+
+[critique app](https://https://matthewctechnology.github.io/stacked/)
+
 ## Libraries and Frameworks
 
 - TypeScript
