@@ -41,8 +41,8 @@ export function Chat() {
             key={idx}
             className={
               msg.role === 'user'
-                ? 'bg-blue-100 text-blue-900 font-mono font-semibold px-1 py-0.5 rounded self-end'
-                : 'bg-green-100 text-green-900 font-mono font-semibold px-1 py-0.5 rounded self-start'
+                ? 'bg-black/[.05] font-mono font-semibold px-1 py-0.5 rounded self-end'
+                : 'bg-white text-black font-mono font-semibold px-1 py-0.5 rounded self-start'
             }
             data-testid={msg.role}
           >
