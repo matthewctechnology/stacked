@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   description: "critique",
 };
 
+export const dynamic = 'error';
+
 export default function RootLayout({
   children,
 }: Readonly<{
