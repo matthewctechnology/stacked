@@ -21,11 +21,11 @@ type ChatAction =
   | { type: 'RESET' };
 
 const AI_RESPONSES = [
-  'That is a novel idea with potential!',
-  'Consider refining your concept for more impact.',
-  'This proposal is viable and valuable.',
-  'Try to clarify your main objective.',
-  'Interesting! What an inspired idea.'
+  'Great! 🚀',
+  'Good. 👍',
+  'Ok. 🫳',
+  'Bad. 👎',
+  'Poor! 🚫'
 ];
 
 const initialState: ChatState = {
