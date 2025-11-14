@@ -25,4 +25,4 @@ Stacked - A Monorepo
 - ESLint
 - Jest
 - React Testing Library
-- SuperTest
+- Playwright
