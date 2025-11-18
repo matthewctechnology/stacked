@@ -61,6 +61,10 @@ jobs:
           fi
       - name: Test critique
         run: npm test
+      - name: Install playwright
+        run: npx playwright install --with-deps
+      - name: E2E critique
+        run: npm run test:e2e
       - name: Upload critique
         uses: actions/upload-pages-artifact@v4
         with:
