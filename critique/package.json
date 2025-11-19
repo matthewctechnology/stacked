@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint ./src ./test --ext .js,.jsx,.ts,.tsx",
     "test": "jest",
     "test:e2e": "playwright test"
   },
