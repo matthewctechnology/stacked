@@ -31,6 +31,8 @@ jobs:
         run: npm ci
       - name: Clean output
         run: rm -rf ./out
+      - name: Lint critique
+        run: npm run lint
       - name: Build critique
         run: npm run build --if-present
         env:
@@ -49,3 +51,14 @@ jobs:
           fi
       - name: Test critique
         run: npm test
+      - name: Cache playwright
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-browsers-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-browsers-
+      - name: Install playwright
+        run: npx playwright install --with-deps
+      - name: Test:e2e critique
+        run: npm run test:e2e

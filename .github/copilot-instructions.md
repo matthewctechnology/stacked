@@ -28,11 +28,11 @@ The AI Web Application will allow users to prompt an agent to critique a creativ
 - Use single quotes for strings
 - Use function based react components in Next
 - Use arrow functions for callbacks
-- Always provide a filename with path for where the code should be located
+- Always provide a filename with relative path for where the code should be located in the repository
 - Always provide a seperate test for suggested code
 - Test units with Jest when possible and provide brief caveat when not possible
 - Test with React Testing Library to ensure renders and async work with frameworks
-- Test end-to-end with SuperTest
+- Test end-to-end with Playwright
 
 ## UI guidelines
 
