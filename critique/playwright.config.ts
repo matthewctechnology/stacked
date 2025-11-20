@@ -1,5 +1,4 @@
 import { defineConfig, devices } from '@playwright/test';
-import { getWebServerCommand } from './utils/getWebServerCommand';
 
 
 export default defineConfig({
@@ -12,7 +11,7 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   webServer: {
-    command: getWebServerCommand(process.env.E2E === 'true'),
+    command: 'npm run build && npx serve@latest out',
     port: 3000,
     reuseExistingServer: !process.env.CI,
   },

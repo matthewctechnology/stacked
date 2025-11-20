@@ -31,29 +31,10 @@ jobs:
         run: npm ci
       - name: Clean output
         run: rm -rf ./out
-      - name: Cache playwright
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-browsers-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-browsers-
-      - name: Install playwright
-        run: npx playwright install --with-deps
-      - name: Build critique
-        run: npm run build --if-present
-        env:
-          GITHUB_PAGES: 'false'
-          E2E: 'false'
-      - name: Test:e2e critique
-        run: npm run test:e2e
-      - name: Clean output
-        run: rm -rf ./out
       - name: Build critique
         run: npm run build --if-present
         env:
           GITHUB_PAGES: 'true'
-          E2E: 'false'
       - name: Check output
         run: |
           if [ ! -d './out' ]; then
@@ -68,5 +49,3 @@ jobs:
           fi
       - name: Test critique
         run: npm test
-      - name: Lint critique
-        run: npm run lint

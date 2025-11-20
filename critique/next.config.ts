@@ -2,7 +2,6 @@ import type { NextConfig } from 'next';
 
 
 const isDeployment = process.env.GITHUB_PAGES === 'true';
-const isE2E = process.env.E2E === 'true';
 
 const nextConfig: NextConfig = {
   compiler: {
@@ -12,7 +11,7 @@ const nextConfig: NextConfig = {
     basePath: '/stacked',
     assetPrefix: '/stacked/',
   }),
-  ...(isDeployment && !isE2E && { output: 'export' }),
+  output: 'export',
 };
 
 export default nextConfig;
