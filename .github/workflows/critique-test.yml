@@ -31,12 +31,35 @@ jobs:
         run: npm ci
       - name: Clean output
         run: rm -rf ./out
-      - name: Lint critique
-        run: npm run lint
+      - name: Cache playwright
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: ${{ runner.os }}-playwright-browsers-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-playwright-browsers-
+      - name: Install playwright
+        run: npx playwright install --with-deps
       - name: Build critique
         run: npm run build --if-present
         env:
           GITHUB_PAGES: 'true'
+          E2E: 'true'
+      - name: Start critique
+        run: nohup npm start &
+      - name: Wait-on critique
+        run: npx wait-on http://localhost:3000
+      - name: Test:e2e critique
+        run: npm run test:e2e
+      - name: Stop critique
+        run: pkill -f "next start" || true
+      - name: Clean output
+        run: rm -rf ./out
+      - name: Build critique
+        run: npm run build --if-present
+        env:
+          GITHUB_PAGES: 'true'
+          E2E: 'false'
       - name: Check output
         run: |
           if [ ! -d './out' ]; then
@@ -51,14 +74,5 @@ jobs:
           fi
       - name: Test critique
         run: npm test
-      - name: Cache playwright
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/ms-playwright
-          key: ${{ runner.os }}-playwright-browsers-${{ hashFiles('package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-playwright-browsers-
-      - name: Install playwright
-        run: npx playwright install --with-deps
-      - name: Test:e2e critique
-        run: npm run test:e2e
+      - name: Lint critique
+        run: npm run lint
