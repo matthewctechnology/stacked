@@ -57,14 +57,8 @@ jobs:
         env:
           GITHUB_PAGES: 'true'
           E2E: 'true'
-      - name: Start critique
-        run: nohup npm start &
-      - name: Wait-on critique
-        run: npx wait-on http://localhost:3000
       - name: Test:e2e critique
         run: npm run test:e2e
-      - name: Stop critique
-        run: pkill -f "next start" || true
       - name: Clean output
         run: rm -rf ./out
       - name: Build critique
