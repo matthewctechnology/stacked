@@ -72,8 +72,14 @@ jobs:
             ${{ runner.os }}-playwright-browsers-
       - name: Install playwright
         run: npx playwright install --with-deps
+      - name: Start critique
+        run: nohup npm start &
+      - name: Wait-on critique
+        run: npx wait-on http://localhost:3000
       - name: Test:e2e critique
         run: npm run test:e2e
+      - name: Stop critique
+        run: pkill -f "next start" || true
       - name: Upload critique
         uses: actions/upload-pages-artifact@v4
         with:
