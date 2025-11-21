@@ -22,18 +22,15 @@ if [[ "$VERSION_TYPE" != "patch"
   exit 1
 fi
 
+pushd "$(dirname "$0")/.." > /dev/null
 if [[ "$VERSION_TYPE" == "same" ]]; then
   CURRENT_VERSION=$(npm pkg get version | tr -d '"')
-  NEW_VERSION=$(
-    npm version "$CURRENT_VERSION" --no-git-tag-version --allow-same-version
-    | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+'
-  )
+  NEW_VERSION=$(npm version "$CURRENT_VERSION" --no-git-tag-version --allow-same-version | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+')
 else
-  NEW_VERSION=$(
-    npm version "$VERSION_TYPE" --no-git-tag-version
-    | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+'
-  )
+  pushd "$(dirname "$0")/.." > /dev/null
+  NEW_VERSION=$(npm version "$VERSION_TYPE" --no-git-tag-version | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+')
 fi
+popd > /dev/null
 
 git add critique/package.json
 git commit -s -m "versions critique v$NEW_VERSION"
