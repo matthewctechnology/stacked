@@ -18,6 +18,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22.17.0'
+      - name: Configure next
+        uses: actions/configure-pages@v5
+        with:
+          static_site_generator: next
       - name: Cache critique
         uses: actions/cache@v4
         with:
