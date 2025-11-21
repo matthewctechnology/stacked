@@ -72,6 +72,10 @@ jobs:
         uses: actions/configure-pages@v5
         with:
           static_site_generator: next
+      - name: Build critique
+        run: npm run build --if-present
+        env:
+          GITHUB_PAGES: 'true'
       - name: Upload critique
         uses: actions/upload-pages-artifact@v4
         with:
