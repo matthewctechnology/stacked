@@ -33,6 +33,6 @@ fi
 popd > /dev/null
 
 git add critique/package.json
-git commit -s -m "versions critique v$NEW_VERSION"
-git tag -s "v$NEW_VERSION" -m "releases critique v$NEW_VERSION"
+git commit -m "versions critique v$NEW_VERSION"
+git tag "v$NEW_VERSION" -m "releases critique v$NEW_VERSION"
 git push origin "$CURRENT_BRANCH:$CURRENT_BRANCH" "v$NEW_VERSION"
