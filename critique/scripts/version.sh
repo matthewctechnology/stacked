@@ -23,10 +23,11 @@ fi
 
 pushd "$(dirname "$0")/.." > /dev/null
 NEW_VERSION=$(npm version "$VERSION_TYPE" --no-git-tag-version | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+')
+
+pushd "$(dirname "$1")/.." > /dev/null
+git add critique/package.json critique/package-lock.json
 popd > /dev/null
 
-git add critique/package.json critique/package-lock.json
 git commit -m "Version critique v$NEW_VERSION"
 git tag "v$NEW_VERSION" -m "Release critique v$NEW_VERSION"
 git push origin "$CURRENT_BRANCH:$CURRENT_BRANCH" "v$NEW_VERSION"
-
