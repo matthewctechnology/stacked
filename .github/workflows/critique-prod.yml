@@ -26,10 +26,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22.17.0'
-      - name: Configure next
-        uses: actions/configure-pages@v5
-        with:
-          static_site_generator: next
       - name: Cache critique
         uses: actions/cache@v4
         with:
@@ -72,14 +68,16 @@ jobs:
             ${{ runner.os }}-playwright-browsers-
       - name: Install playwright
         run: npx playwright install --with-deps
-      - name: Start critique
-        run: nohup npm start &
-      - name: Wait-on critique
-        run: npx wait-on http://localhost:3000
       - name: Test:e2e critique
         run: npm run test:e2e
-      - name: Stop critique
-        run: pkill -f "next start" || true
+      - name: Configure next
+        uses: actions/configure-pages@v5
+        with:
+          static_site_generator: next
+      - name: Build critique
+        run: npm run build --if-present
+        env:
+          GITHUB_PAGES: 'true'
       - name: Upload critique
         uses: actions/upload-pages-artifact@v4
         with:

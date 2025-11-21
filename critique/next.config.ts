@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next';
 
 
 const isDeployment = process.env.GITHUB_PAGES === 'true';
