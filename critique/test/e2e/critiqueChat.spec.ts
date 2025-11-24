@@ -8,6 +8,14 @@ test.describe('Chat with Static AI Response', () => {
     await expect(page.getByRole('button', { name: 'submit' })).toBeVisible();
   });
 
+  test('should display disclaimer', async ({ page }) => {
+    await page.goto('/');
+    const disclaimer_text = 'unvalidated responses inferred at individual risk';
+    const disclaimer = page.getByText(disclaimer_text);
+
+    await expect(disclaimer).toBeVisible();
+  });
+
   test('should keep submit disabled with empty input', async ({ page }) => {
     await page.goto('/');
     const button = page.getByRole('button', { name: 'submit' });

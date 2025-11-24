@@ -21,6 +21,14 @@ describe('Home', () => {
     expect(received).toEqual(expected);
   });
 
+  test('should display disclaimer', () => {
+    render(<Home />);
+    const expected = 'unvalidated responses inferred at individual risk';
+    const received = screen.queryByText(expected)?.textContent;
+
+    expect(received).toEqual(expected);
+  });
+
   test('should display thinking while loading', async () => {
     render(<Home />);
     const inputField = screen.getByPlaceholderText('enter an idea');
