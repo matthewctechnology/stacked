@@ -85,7 +85,8 @@ export default function Home() {
           <Chat />
         </div>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
+      <footer className="bg-black/[.05] text-white/25 text-[9px] font-mono font-semibold row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
+        <p>unvalidated responses inferred at individual risk</p>
       </footer>
     </div>
   );

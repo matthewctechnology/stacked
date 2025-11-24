@@ -21,12 +21,20 @@ describe('Home', () => {
     expect(received).toEqual(expected);
   });
 
+  test('should display disclaimer', () => {
+    render(<Home />);
+    const expected = 'unvalidated responses inferred at individual risk';
+    const received = screen.queryByText(expected)?.textContent;
+
+    expect(received).toEqual(expected);
+  });
+
   test('should display thinking while loading', async () => {
     render(<Home />);
     const inputField = screen.getByPlaceholderText('enter an idea');
     const button = screen.getByRole('button', { name: 'submit' });
 
-    await userEvent.type(inputField, 'my idea');
+    await userEvent.type(inputField, 'an idea');
     fireEvent.click(button);
 
     expect(screen.queryByText('thinking...')).not.toBeNull();
@@ -40,12 +48,26 @@ describe('Home', () => {
     const inputField = screen.getByPlaceholderText('enter an idea');
     const button = screen.getByRole('button', { name: 'submit' });
 
-    await userEvent.type(inputField, 'message');
+    await userEvent.type(inputField, 'Great! 🚀');
     fireEvent.click(button);
 
-    expect(screen.getByTestId('user').textContent).toBe('message');
+    expect(screen.getByTestId('user').textContent).toBe('Great! 🚀');
     await waitFor(() => {
       expect(screen.getByTestId('ai')).not.toBeNull();
+    });
+  });
+
+  test('should clear text input on submit', async () => {
+    render(<Home />);
+    const inputField = screen.getByPlaceholderText('enter an idea');
+    const button = screen.getByRole('button', { name: 'submit' });
+
+    await userEvent.type(inputField, 'another idea');
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(inputField.textContent).toBe('');
+      expect(inputField.textContent).not.toBe('another idea');
     });
   });
 

@@ -8,6 +8,14 @@ test.describe('Chat with Static AI Response', () => {
     await expect(page.getByRole('button', { name: 'submit' })).toBeVisible();
   });
 
+  test('should display disclaimer', async ({ page }) => {
+    await page.goto('/');
+    const disclaimer_text = 'unvalidated responses inferred at individual risk';
+    const disclaimer = page.getByText(disclaimer_text);
+
+    await expect(disclaimer).toBeVisible();
+  });
+
   test('should keep submit disabled with empty input', async ({ page }) => {
     await page.goto('/');
     const button = page.getByRole('button', { name: 'submit' });
@@ -28,19 +36,22 @@ test.describe('Chat with Static AI Response', () => {
     await expect(page.getByTestId('ai')).toBeVisible({ timeout: 2000 });
   });
 
-  test('should clear chat on new submit', async ({ page }) => {
+  test('should clear chat and text input on new submit', async ({ page }) => {
     await page.goto('/');
     const input = page.getByPlaceholder('an idea');
     const button = page.getByRole('button', { name: 'submit' });
 
     await input.fill('first');
     await button.click();
+    await expect(page.getByTestId('user')).toHaveText('first');
     await expect(page.getByTestId('ai')).toBeVisible({ timeout: 2000 });
+    await expect(input).toBeEmpty();
 
     await input.fill('second');
     await button.click();
     await expect(page.getByTestId('user')).toHaveText('second');
     await expect(page.getByTestId('ai')).toBeVisible({ timeout: 2000 });
+    await expect(input).toBeEmpty();
   });
 
   test('should reset chat on reload', async ({ page }) => {
