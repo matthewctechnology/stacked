@@ -42,6 +42,7 @@ function chatReducer(state: ChatState, action: ChatAction): ChatState {
     case 'SUBMIT':
       return {
         ...state,
+        input: '',
         loading: true,
         messages: [{ role: 'user', text: state.input }],
         error: null
