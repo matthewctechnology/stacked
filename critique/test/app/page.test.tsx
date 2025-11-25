@@ -92,4 +92,14 @@ describe('Home', () => {
       expect(screen.getByTestId('ai')).not.toBeNull();
     });
   });
+
+  test('should disable submit for invalid input', async () => {
+    render(<Home />);
+    const inputField = screen.getByPlaceholderText('enter an idea');
+    const button = screen.getByRole('button', { name: 'submit' }) as HTMLButtonElement;
+
+    await userEvent.type(inputField, 'a'.repeat(257));
+    expect(button.disabled).toBe(true);
+    expect(button.getAttribute('title')).toBe('input too long');
+  });
 });

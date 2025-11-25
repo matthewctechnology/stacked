@@ -2,17 +2,22 @@
 
 import { useEffect } from 'react';
 import { useChatReducer } from './useChatReducer';
+import { validateInput } from './inputValidator';
 
 
 export function Chat() {
   const { state, dispatch, simulateAIResponse } = useChatReducer();
+  const validation = validateInput(state.input);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: 'INPUT_CHANGE', value: e.target.value });
   };
 
   const handleSubmit = () => {
-    if (!state.input.trim()) return;
+    if (!validation.valid) {
+      dispatch({ type: 'ERROR', value: validation.error || 'Invalid input.' });
+      return;
+    }
     dispatch({ type: 'SUBMIT' });
 
     setTimeout(() => {
@@ -68,8 +73,9 @@ export function Chat() {
       <button
         className="bg-black/[.05] font-mono font-semibold px-1 py-0.5 rounded ml-2"
         onClick={handleSubmit}
-        disabled={state.loading || !state.input.trim()}
+        disabled={state.loading || !validation.valid}
         aria-label="submit"
+        title={!validation.valid ? validation.error : 'submit idea for critique'}
       >
         submit
       </button>
