@@ -16,7 +16,24 @@ describe('validateInput', () => {
   });
 
   test('should reject high temperature', () => {
-    expect(validateInput('temperature: 1')).toEqual({ valid: false, error: 'input forbidden' });
+    expect(validateInput('temperature: 1')).toEqual({ valid: false, error: 'input temprature forbidden' });
+  });
+
+  test('should reject negative temperature', () => {
+    expect(validateInput('temperature: -0.1')).toEqual({ valid: false, error: 'input temprature forbidden' });
+  });
+
+  test('should reject temperature above 0.2', () => {
+    expect(validateInput('temperature: 0.9')).toEqual({ valid: false, error: 'input temprature forbidden' });
+    expect(validateInput('temperature: 1')).toEqual({ valid: false, error: 'input temprature forbidden' });
+  });
+
+  test('should accept temperature exactly 0.2', () => {
+    expect(validateInput('temperature: 0.2')).toEqual({ valid: true });
+  });
+
+  test('should accept temperature 0', () => {
+    expect(validateInput('temperature: 0')).toEqual({ valid: true });
   });
 
   test('should reject SQL keywords', () => {
