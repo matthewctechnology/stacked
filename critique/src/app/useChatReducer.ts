@@ -21,11 +21,11 @@ type ChatAction =
   | { type: 'RESET' };
 
 const AI_RESPONSES = [
-  'Great! Get started. 🚀',
-  'Good. Consider iteration. 👍',
-  'Ok. Needs work. 🫳',
-  'Bad. Consider revision. 👎',
-  'Poor! Not recommended. 🚫'
+  'Great! Get started 🚀',
+  'Good. Consider iteration 👍',
+  'Ok. Needs work 🫳',
+  'Bad. Consider revision 👎',
+  'Poor! Not recommended 🚫'
 ];
 
 const initialState: ChatState = {
