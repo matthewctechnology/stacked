@@ -48,10 +48,10 @@ describe('Home', () => {
     const inputField = screen.getByPlaceholderText('enter an idea');
     const button = screen.getByRole('button', { name: 'submit' });
 
-    await userEvent.type(inputField, 'Great! 🚀');
+    await userEvent.type(inputField, 'Great! Get started 🚀');
     fireEvent.click(button);
 
-    expect(screen.getByTestId('user').textContent).toBe('Great! 🚀');
+    expect(screen.getByTestId('user').textContent).toBe('Great! Get started 🚀');
     await waitFor(() => {
       expect(screen.getByTestId('ai')).not.toBeNull();
     });
