@@ -32,21 +32,6 @@ test.describe('Chat with Static AI Response', () => {
     await expect(button).toHaveAttribute('title', 'input forbidden');
   });
 
-  test('should enable submit with valid input and show chat', async ({ page }) => {
-    await page.goto('/');
-    const input = page.getByPlaceholder('enter an idea');
-    const button = page.getByRole('button', { name: 'submit' });
-
-    await input.fill('an idea');
-    await expect(button).toBeEnabled();
-    await expect(button).toHaveAttribute('title', 'submit idea for critique');
-    await button.click();
-
-    await expect(page.getByTestId('user')).toHaveText('an idea');
-    await expect(page.getByText('thinking...')).toBeVisible();
-    await expect(page.getByTestId('ai')).toBeVisible({ timeout: 2000 });
-  });
-
   test('should disable submit for invalid temperature', async ({ page }) => {
     await page.goto('/');
     const input = page.getByPlaceholder('enter an idea');
@@ -71,6 +56,21 @@ test.describe('Chat with Static AI Response', () => {
 
     await input.fill('temperature: 0');
     await expect(button).toBeEnabled();
+  });
+
+  test('should enable submit with valid input and show chat', async ({ page }) => {
+    await page.goto('/');
+    const input = page.getByPlaceholder('enter an idea');
+    const button = page.getByRole('button', { name: 'submit' });
+
+    await input.fill('an idea');
+    await expect(button).toBeEnabled();
+    await expect(button).toHaveAttribute('title', 'submit idea for critique');
+    await button.click();
+
+    await expect(page.getByTestId('user')).toHaveText('an idea');
+    await expect(page.getByText('thinking...')).toBeVisible();
+    await expect(page.getByTestId('ai')).toBeVisible({ timeout: 2000 });
   });
 
   test('should clear chat and text input on new submit', async ({ page }) => {

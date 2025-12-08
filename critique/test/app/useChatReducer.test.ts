@@ -72,7 +72,7 @@ describe('useChatReducer', () => {
     expect(result.current.state.error).toBeNull();
   });
 
-  test('should simulate AI reposnse as a string', () => {
+  test('should simulate AI response as a string', () => {
     const { result } = renderHook(() => useChatReducer());
     const response = result.current.simulateAIResponse();
 
