@@ -1,4 +1,4 @@
-import { describe, expect, test } from '@jest/globals';
+import { describe, expect, jest, test } from '@jest/globals';
 import { renderHook, act } from '@testing-library/react';
 import { useChatReducer } from '../../src/app/useChatReducer';
 
@@ -75,6 +75,18 @@ describe('useChatReducer', () => {
   test('should simulate AI response as a string', () => {
     const { result } = renderHook(() => useChatReducer());
     const response = result.current.simulateAIResponse();
+
+    expect(typeof response).toBe('string');
+    expect(response.length).toBeGreaterThan(0);
+  });
+
+  test('should fetchAIResponse fallback to static response on API error', async () => {
+    const { result } = renderHook(() => useChatReducer());
+    const err = new Error('API unavailable')
+
+    global.fetch = jest.fn().mockRejectedValue(err as never) as typeof fetch;
+
+    const response = await result.current.fetchAIResponse('test');
 
     expect(typeof response).toBe('string');
     expect(response.length).toBeGreaterThan(0);

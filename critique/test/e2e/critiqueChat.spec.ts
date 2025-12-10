@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 
-test.describe('Chat with Static AI Response', () => {
+test.describe('Chat with Hybrid AI Response', () => {
   test('should display input and submit button', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByPlaceholder('enter an idea')).toBeVisible();
@@ -71,6 +71,18 @@ test.describe('Chat with Static AI Response', () => {
     await expect(page.getByTestId('user')).toHaveText('an idea');
     await expect(page.getByText('thinking...')).toBeVisible();
     await expect(page.getByTestId('ai')).toBeVisible({ timeout: 2000 });
+  });
+
+    test('should display AI response from API', async ({ page }) => {
+    await page.goto('/');
+    const input = page.getByPlaceholder('enter an idea');
+    const button = page.getByRole('button', { name: 'submit' });
+
+    await input.fill('an image with black background');
+    await button.click();
+
+    await expect(page.getByTestId('ai')).toBeVisible({ timeout: 2000 });
+    await expect(page.getByTestId('ai')).not.toBeNull();
   });
 
   test('should clear chat and text input on new submit', async ({ page }) => {

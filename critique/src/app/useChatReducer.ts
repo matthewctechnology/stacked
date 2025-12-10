@@ -73,5 +73,22 @@ export function useChatReducer() {
     return AI_RESPONSES[random];
   };
 
-  return { state, dispatch, simulateAIResponse };
+  const fetchAIResponse = async (input: string): Promise<string> => {
+    try {
+      const res = await fetch('/api/critique', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ input })
+      });
+      if (!res.ok) throw new Error('API unavailable');
+      const data = await res.json();
+      if (data.message) return data.message;
+      throw new Error(data.error || 'AI error');
+    } catch (err) {
+      if (err) err = 'Static Fallback';
+      return simulateAIResponse();
+    }
+  };
+
+  return { state, dispatch, fetchAIResponse, simulateAIResponse };
 }
