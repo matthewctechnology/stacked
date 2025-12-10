@@ -16,7 +16,7 @@ test.describe('Chat with Hybrid AI Response', () => {
     await expect(disclaimer).toBeVisible();
   });
 
-  test('should keep submit disabled with empty input', async ({ page }) => {
+  test('should disable submit button with empty input', async ({ page }) => {
     await page.goto('/');
     const button = page.getByRole('button', { name: 'submit' });
     await expect(button).toBeDisabled();
