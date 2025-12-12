@@ -85,7 +85,8 @@ export function useChatReducer() {
       if (data.message) return data.message;
       throw new Error(data.error || 'AI error');
     } catch (err) {
-      if (err) err = 'Static Fallback';
+      if (err) err = `Static Fallback: ${err}`;
+
       return simulateAIResponse();
     }
   };
