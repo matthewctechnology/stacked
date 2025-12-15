@@ -91,4 +91,32 @@ describe('useChatReducer', () => {
     expect(typeof response).toBe('string');
     expect(response.length).toBeGreaterThan(0);
   });
+
+  test('returns a static fallback response when fetch throws', async () => {
+    const { result } = renderHook(() => useChatReducer());
+
+    // Mock fetch to throw an error
+    global.fetch = jest.fn().mockRejectedValue(new Error('API unavailable') as never) as typeof fetch;
+
+    const response = await result.current.fetchAIResponse('test input');
+
+    // Should return a static fallback response
+    expect(typeof response).toBe('string');
+    expect(response).not.toBe(null);
+  });
+
+  test('returns a static fallback response when fetch returns !ok', async () => {
+    const { result } = renderHook(() => useChatReducer());
+
+    // Mock fetch to return !ok and error message
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: false,
+      json: async () => ({ error: 'API unavailable' })
+    } as never ) as typeof fetch;
+
+    const response = await result.current.fetchAIResponse('test input');
+
+    expect(typeof response).toBe('string');
+    expect(response).not.toBe(null);
+  });
 });

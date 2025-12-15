@@ -8,14 +8,12 @@ const MAX_TOKENS = 256;
 export async function POST(req: NextRequest) {
   const { input } = await req.json();
   if (!input || typeof input !== 'string' || input.length > 256) {
-    const response = new Response(JSON.stringify({ error: 'invalid input' }), { status: 400 });
-    return response;
+    return new Response(JSON.stringify({ error: 'invalid input' }), { status: 400 });
   }
 
   const token = process.env.GITHUB_TOKEN;
   if (!token) {
-    const response = new Response(JSON.stringify({ error: 'server misconfigured' }), { status: 500 });
-    return response;
+    return new Response(JSON.stringify({ error: 'server misconfigured' }), { status: 500 });
   }
 
   try {
@@ -51,7 +49,6 @@ export async function POST(req: NextRequest) {
     const aiMessage = data.choices?.[0]?.message?.content?.trim() || 'No response';
     return new Response(JSON.stringify({ message: aiMessage }), { status: 200 });
   } catch (err) {
-    if (err) err = 'network error';
     return new Response(JSON.stringify({ error: err }), { status: 502 });
   }
 }

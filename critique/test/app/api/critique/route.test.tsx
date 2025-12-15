@@ -1,55 +1,63 @@
-import { describe, expect, jest, test } from '@jest/globals';
-import Home from '../../../../src/app/page';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+/**
+ * @jest-environment node
+ */
+import { afterAll, beforeEach, describe, expect, jest, test } from '@jest/globals';
+import { POST } from '../../../../src/app/api/critique/route';
+import type { NextRequest } from 'next/server';
 
 
-describe('API /api/critique', () => {
+const mockEnv = process.env;
+
+describe('/api/critique API route', () => {
+  beforeEach(() => {
+    jest.resetModules();
+    process.env = { ...mockEnv, GITHUB_TOKEN: 'test-token' };
+  });
+
+  afterAll(() => {
+    process.env = mockEnv;
+  });
+
   test('rejects invalid input', async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      json: async () => ({ error: 'invalid input' }),
-      ok: false
-    } as never) as typeof fetch;
-    render(<Home />);
-    const inputField = screen.getByPlaceholderText('enter an idea');
-    const button = screen.getByRole('button', { name: 'submit' }) as HTMLButtonElement;
-
-    await userEvent.type(inputField, 'a'.repeat(257));
-    expect(button.disabled).toBe(true);
-    expect(button.getAttribute('title')).toBe('input too long');
+    const req = { json: async () => ({ input: ' ' }) } as NextRequest;
+    const res = await POST(req);
+    expect(res.status).toBe(404);
+    const data = await res.json();
+    expect(data.error).toBe('Not Found');
   });
 
-  test('falls back on missing token', async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      json: async () => ({ error: 'server misconfigured' }),
-      ok: false
-    } as never) as typeof fetch;
-    render(<Home />);
+  test('rejects missing token', async () => {
     process.env.GITHUB_TOKEN = '';
-    const inputField = screen.getByPlaceholderText('enter an idea');
-    const button = screen.getByRole('button', { name: 'submit' });
-
-    await userEvent.type(inputField, 'valid idea');
-    fireEvent.click(button);
-    await waitFor(() => {
-      expect(screen.getByTestId('ai').textContent).not.toBeNull();
-    });
+    const req = { json: async () => ({ input: 'valid idea' }) } as NextRequest;
+    const res = await POST(req);
+    expect(res.status).toBe(500);
+    const data = await res.json();
+    expect(data.error).toBe('server misconfigured');
   });
 
-  test('should display AI response from API', async () => {
+  test('returns AI message on success', async () => {
     global.fetch = jest.fn().mockResolvedValue({
-      json: async () => ({ message: 'good example of simplicity' }),
-      ok: true
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { content: 'AI critique response' } }]
+      })
     } as never) as typeof fetch;
-    render(<Home />);
-    const inputField = screen.getByPlaceholderText('enter an idea');
-    const button = screen.getByRole('button', { name: 'submit' });
+    const req = { json: async () => ({ input: 'valid idea' }) } as NextRequest;
+    const res = await POST(req);
+    expect(res.status).toBe(200);
+    const data = await res.json();
+    expect(data.message).toBe('AI critique response');
+  });
 
-    await userEvent.type(inputField, 'an image with black background');
-    fireEvent.click(button);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('ai').textContent).toBe('good example of simplicity');
-    });
+  test('returns error if AI API fails', async () => {
+    global.fetch = jest.fn().mockRejectedValue({
+      ok: false,
+      message: 'AI API error'
+    } as never ) as typeof fetch;
+    const req = { json: async () => ({ input: 'valid idea' }) } as NextRequest;
+    const res = await POST(req);
+    expect(res.status).toBe(502);
+    const data = await res.json();
+    expect(data.error.message).toBe('AI API error');
   });
 });

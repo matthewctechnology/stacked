@@ -80,7 +80,10 @@ export function useChatReducer() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ input })
       });
-      if (!res.ok) throw new Error('API unavailable');
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'API unavailable');
+      }
       const data = await res.json();
       if (data.message) return data.message;
       throw new Error(data.error || 'AI error');
