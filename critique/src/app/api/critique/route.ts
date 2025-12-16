@@ -15,6 +15,7 @@ export async function POST(req: NextRequest) {
   if (!token) {
     return new Response(JSON.stringify({ error: 'server misconfigured' }), { status: 500 });
   }
+  return new Response(JSON.stringify({ error: 'no implementation' }), { status: 501 });
 
   try {
     const body = {
