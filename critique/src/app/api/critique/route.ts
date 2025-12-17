@@ -41,12 +41,11 @@ export async function POST(req: NextRequest) {
     });
 
     if (!res.ok) {
-      const error = await res.json();
-      return new Response(JSON.stringify({ error: error.message || 'AI API error' }), { status: res.status });
+      return new Response(JSON.stringify({ error: res.statusText || 'AI API error' }), { status: res.status });
     }
 
     const data = await res.json();
-    const aiMessage = data.choices?.[0]?.message?.content?.trim() || 'No response';
+    const aiMessage = data.choices?.[0]?.message?.content?.trim() || 'empty response';
     return new Response(JSON.stringify({ message: aiMessage }), { status: 200 });
   } catch (err) {
     return new Response(JSON.stringify({ error: err }), { status: 502 });

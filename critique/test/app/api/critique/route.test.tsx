@@ -19,14 +19,22 @@ describe('/api/critique API route', () => {
   });
 
   test('rejects invalid input', async () => {
-    const req = { json: async () => ({ input: ' ' }) } as NextRequest;
+    global.fetch = jest.fn().mockRejectedValue({
+      ok: false,
+      message: 'invalid input'
+    } as never ) as typeof fetch;
+    const req = { json: async () => ({ input: 42 }) } as NextRequest;
     const res = await POST(req);
-    expect(res.status).toBe(404);
+    expect(res.status).toBe(400);
     const data = await res.json();
-    expect(data.error).toBe('Not Found');
+    expect(data.error).toBe('invalid input');
   });
 
   test('rejects missing token', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: false,
+      message: 'server misconfigured'
+    } as never) as typeof fetch;
     process.env.GITHUB_TOKEN = '';
     const req = { json: async () => ({ input: 'valid idea' }) } as NextRequest;
     const res = await POST(req);
@@ -47,6 +55,20 @@ describe('/api/critique API route', () => {
     expect(res.status).toBe(200);
     const data = await res.json();
     expect(data.message).toBe('AI critique response');
+  });
+
+  test('returns empty AI message on success', async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({
+        choices: [{ message: { content: '' } }]
+      })
+    } as never) as typeof fetch;
+    const req = { json: async () => ({ input: 'valid idea' }) } as NextRequest;
+    const res = await POST(req);
+    expect(res.status).toBe(200);
+    const data = await res.json();
+    expect(data.message).toBe('empty response');
   });
 
   test('returns error if AI API fails', async () => {
