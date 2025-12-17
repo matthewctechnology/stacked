@@ -48,10 +48,10 @@ describe('Home', () => {
     const inputField = screen.getByPlaceholderText('enter an idea');
     const button = screen.getByRole('button', { name: 'submit' });
 
-    await userEvent.type(inputField, 'Great! 🚀');
+    await userEvent.type(inputField, 'an idea');
     fireEvent.click(button);
 
-    expect(screen.getByTestId('user').textContent).toBe('Great! 🚀');
+    expect(screen.getByTestId('user').textContent).toBe('an idea');
     await waitFor(() => {
       expect(screen.getByTestId('ai')).not.toBeNull();
     });
@@ -91,6 +91,16 @@ describe('Home', () => {
     await waitFor(() => {
       expect(screen.getByTestId('ai')).not.toBeNull();
     });
+  });
+
+  test('should disable submit for empty input', async () => {
+    render(<Home />);
+    const inputField = screen.getByPlaceholderText('enter an idea');
+    const button = screen.getByRole('button', { name: 'submit' }) as HTMLButtonElement;
+
+    await userEvent.type(inputField, ' ');
+    expect(button.disabled).toBe(true);
+    expect(button.getAttribute('title')).toBe('input empty');
   });
 
   test('should disable submit for invalid input', async () => {
