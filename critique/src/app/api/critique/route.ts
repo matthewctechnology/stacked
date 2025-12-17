@@ -1,8 +1,9 @@
 import type { NextRequest } from 'next/server';
+import OpenAI from 'openai';
 
 
-const GITHUB_AI_URL = 'https://api.github.com/ai/v1/completions';
-const MODEL = 'gpt-4.1-turbo';
+const ENDPOINT = 'https://models.github.ai/inference';
+const MODEL = 'openai/gpt-4.1';
 const MAX_TOKENS = 256;
 
 export async function POST(req: NextRequest) {
@@ -17,7 +18,12 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    const body = {
+    const openai = new OpenAI({
+      apiKey: token,
+      baseURL: ENDPOINT
+    });
+
+    const completion = await openai.chat.completions.create({
       model: MODEL,
       messages: [
         { role: 'system', content: 'You are a concise, logical, and safe creative critique assistant. Reference core design principles. Respond in paragraph form.' },
@@ -28,26 +34,11 @@ export async function POST(req: NextRequest) {
       top_p: 1,
       n: 1,
       stream: false
-    };
-
-    const res = await fetch(GITHUB_AI_URL, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
     });
 
-    if (!res.ok) {
-      return new Response(JSON.stringify({ error: res.statusText || 'AI API error' }), { status: res.status });
-    }
-
-    const data = await res.json();
-    const aiMessage = data.choices?.[0]?.message?.content?.trim() || 'empty response';
+    const aiMessage = completion.choices?.[0]?.message?.content?.trim() || 'empty response';
     return new Response(JSON.stringify({ message: aiMessage }), { status: 200 });
   } catch (err) {
-    return new Response(JSON.stringify({ error: err }), { status: 502 });
+    return new Response(JSON.stringify({ error: err instanceof Error ? err.message : String(err) }), { status: 502 });
   }
 }

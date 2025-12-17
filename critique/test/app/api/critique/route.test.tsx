@@ -2,9 +2,24 @@
  * @jest-environment node
  */
 import { afterAll, beforeEach, describe, expect, jest, test } from '@jest/globals';
-import { POST } from '../../../../src/app/api/critique/route';
 import type { NextRequest } from 'next/server';
 
+let openaiChatCompletionsCreate: jest.Mock;
+
+jest.mock('openai', () => {
+  return {
+    __esModule: true,
+    default: function () {
+      return {
+        chat: {
+          completions: {
+            create: (...args: []) => openaiChatCompletionsCreate(...args)
+          }
+        }
+      };
+    }
+  };
+});
 
 const mockEnv = process.env;
 
@@ -12,6 +27,7 @@ describe('/api/critique API route', () => {
   beforeEach(() => {
     jest.resetModules();
     process.env = { ...mockEnv, GITHUB_TOKEN: 'test-token' };
+    openaiChatCompletionsCreate = jest.fn();
   });
 
   afterAll(() => {
@@ -19,10 +35,7 @@ describe('/api/critique API route', () => {
   });
 
   test('rejects invalid input', async () => {
-    global.fetch = jest.fn().mockRejectedValue({
-      ok: false,
-      message: 'invalid input'
-    } as never ) as typeof fetch;
+    const { POST } = await import('../../../../src/app/api/critique/route');
     const req = { json: async () => ({ input: 42 }) } as NextRequest;
     const res = await POST(req);
     expect(res.status).toBe(400);
@@ -31,11 +44,8 @@ describe('/api/critique API route', () => {
   });
 
   test('rejects missing token', async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: false,
-      message: 'server misconfigured'
-    } as never) as typeof fetch;
     process.env.GITHUB_TOKEN = '';
+    const { POST } = await import('../../../../src/app/api/critique/route');
     const req = { json: async () => ({ input: 'valid idea' }) } as NextRequest;
     const res = await POST(req);
     expect(res.status).toBe(500);
@@ -44,12 +54,10 @@ describe('/api/critique API route', () => {
   });
 
   test('returns AI message on success', async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({
-        choices: [{ message: { content: 'AI critique response' } }]
-      })
-    } as never) as typeof fetch;
+    openaiChatCompletionsCreate.mockResolvedValue({
+      choices: [{ message: { content: 'AI critique response' } }]
+    } as never);
+    const { POST } = await import('../../../../src/app/api/critique/route');
     const req = { json: async () => ({ input: 'valid idea' }) } as NextRequest;
     const res = await POST(req);
     expect(res.status).toBe(200);
@@ -58,12 +66,10 @@ describe('/api/critique API route', () => {
   });
 
   test('returns empty AI message on success', async () => {
-    global.fetch = jest.fn().mockResolvedValue({
-      ok: true,
-      json: async () => ({
-        choices: [{ message: { content: '' } }]
-      })
-    } as never) as typeof fetch;
+    openaiChatCompletionsCreate.mockResolvedValue({
+      choices: [{ message: { content: '' } }]
+    } as never);
+    const { POST } = await import('../../../../src/app/api/critique/route');
     const req = { json: async () => ({ input: 'valid idea' }) } as NextRequest;
     const res = await POST(req);
     expect(res.status).toBe(200);
@@ -72,14 +78,12 @@ describe('/api/critique API route', () => {
   });
 
   test('returns error if AI API fails', async () => {
-    global.fetch = jest.fn().mockRejectedValue({
-      ok: false,
-      message: 'AI API error'
-    } as never ) as typeof fetch;
+    openaiChatCompletionsCreate.mockRejectedValue(new Error('AI API error') as never);
+    const { POST } = await import('../../../../src/app/api/critique/route');
     const req = { json: async () => ({ input: 'valid idea' }) } as NextRequest;
     const res = await POST(req);
     expect(res.status).toBe(502);
     const data = await res.json();
-    expect(data.error.message).toBe('AI API error');
+    expect(data.error).toBe('AI API error');
   });
 });
