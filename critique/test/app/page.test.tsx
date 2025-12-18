@@ -93,6 +93,16 @@ describe('Home', () => {
     });
   });
 
+  test('should disable submit for empty input', async () => {
+    render(<Home />);
+    const inputField = screen.getByPlaceholderText('enter an idea');
+    const button = screen.getByRole('button', { name: 'submit' }) as HTMLButtonElement;
+
+    await userEvent.type(inputField, ' ');
+    expect(button.disabled).toBe(true);
+    expect(button.getAttribute('title')).toBe('input empty');
+  });
+
   test('should disable submit for invalid input', async () => {
     render(<Home />);
     const inputField = screen.getByPlaceholderText('enter an idea');

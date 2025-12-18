@@ -6,24 +6,22 @@ import { validateInput } from './inputValidator';
 
 
 export function Chat() {
-  const { state, dispatch, simulateAIResponse } = useChatReducer();
+  const { state, dispatch, fetchAIResponse } = useChatReducer();
   const validation = validateInput(state.input);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: 'INPUT_CHANGE', value: e.target.value });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validation.valid) {
       dispatch({ type: 'ERROR', value: validation.error || 'Invalid input.' });
       return;
     }
     dispatch({ type: 'SUBMIT' });
 
-    setTimeout(() => {
-      const aiReply = simulateAIResponse();
-      dispatch({ type: 'RESPONSE', value: aiReply });
-    }, 800);
+    const aiReply = await fetchAIResponse(state.input);
+    dispatch({ type: 'RESPONSE', value: aiReply });
   };
 
   useEffect(() => {

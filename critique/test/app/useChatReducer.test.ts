@@ -1,4 +1,4 @@
-import { describe, expect, test } from '@jest/globals';
+import { describe, expect, jest, test } from '@jest/globals';
 import { renderHook, act } from '@testing-library/react';
 import { useChatReducer } from '../../src/app/useChatReducer';
 
@@ -72,11 +72,48 @@ describe('useChatReducer', () => {
     expect(result.current.state.error).toBeNull();
   });
 
-  test('should simulate AI reposnse as a string', () => {
+  test('should simulate AI response as a string', () => {
     const { result } = renderHook(() => useChatReducer());
     const response = result.current.simulateAIResponse();
 
     expect(typeof response).toBe('string');
     expect(response.length).toBeGreaterThan(0);
+  });
+
+  test('should fetchAIResponse fallback to static response on API error', async () => {
+    const { result } = renderHook(() => useChatReducer());
+    const err = new Error('API unavailable')
+
+    global.fetch = jest.fn().mockRejectedValue(err as never) as typeof fetch;
+
+    const response = await result.current.fetchAIResponse('test');
+
+    expect(typeof response).toBe('string');
+    expect(response.length).toBeGreaterThan(0);
+  });
+
+  test('returns a static fallback response when fetch throws', async () => {
+    const { result } = renderHook(() => useChatReducer());
+
+    global.fetch = jest.fn().mockRejectedValue(new Error('API unavailable') as never) as typeof fetch;
+
+    const response = await result.current.fetchAIResponse('test input');
+
+    expect(typeof response).toBe('string');
+    expect(response).not.toBe(null);
+  });
+
+  test('returns a static fallback response when fetch returns !ok', async () => {
+    const { result } = renderHook(() => useChatReducer());
+
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: false,
+      json: async () => ({ error: 'API unavailable' })
+    } as never ) as typeof fetch;
+
+    const response = await result.current.fetchAIResponse('test input');
+
+    expect(typeof response).toBe('string');
+    expect(response).not.toBe(null);
   });
 });
