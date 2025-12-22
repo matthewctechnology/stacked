@@ -1,3 +1,4 @@
+import { fallbackResponseProvider } from '../../src/app/fallbackResponses';
 import { useReducer } from 'react';
 
 
@@ -19,14 +20,6 @@ type ChatAction =
   | { type: 'RESPONSE'; value: string }
   | { type: 'ERROR'; value: string }
   | { type: 'RESET' };
-
-const AI_RESPONSES = [
-  'Great! Get started 🚀',
-  'Good. Consider iteration 👍',
-  'Ok. Needs work 🫳',
-  'Bad. Consider revision 👎',
-  'Poor! Not recommended 🚫'
-];
 
 const initialState: ChatState = {
   input: '',
@@ -68,9 +61,8 @@ function chatReducer(state: ChatState, action: ChatAction): ChatState {
 export function useChatReducer() {
   const [state, dispatch] = useReducer(chatReducer, initialState);
 
-  const simulateAIResponse = () => {
-    const random = Math.floor(Math.random() * AI_RESPONSES.length);
-    return AI_RESPONSES[random];
+  const simulateAIResponse = (input: string) => {
+    return fallbackResponseProvider.getResponse(input);
   };
 
   const fetchAIResponse = async (input: string): Promise<string> => {
@@ -90,7 +82,7 @@ export function useChatReducer() {
     } catch (err) {
       if (err) err = `Static Fallback: ${err}`;
 
-      return simulateAIResponse();
+      return simulateAIResponse(input);
     }
   };
 

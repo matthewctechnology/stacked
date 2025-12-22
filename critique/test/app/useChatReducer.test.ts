@@ -74,7 +74,7 @@ describe('useChatReducer', () => {
 
   test('should simulate AI response as a string', () => {
     const { result } = renderHook(() => useChatReducer());
-    const response = result.current.simulateAIResponse();
+    const response = result.current.simulateAIResponse('a great idea');
 
     expect(typeof response).toBe('string');
     expect(response.length).toBeGreaterThan(0);

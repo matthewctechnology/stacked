@@ -42,7 +42,10 @@ const eslintConfig = defineConfig([
       },
     },
     rules: {
-      'no-unused-vars': 'warn',
+      'no-unused-vars': [
+        'warn',
+        { 'varsIgnorePattern': '^_', 'argsIgnorePattern': '^_', 'ignoreRestSiblings': true }
+      ],
       'no-undef': 'off',
       'react/react-in-jsx-scope': 'off',
     },
