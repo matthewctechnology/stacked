@@ -61,8 +61,8 @@ function chatReducer(state: ChatState, action: ChatAction): ChatState {
 export function useChatReducer() {
   const [state, dispatch] = useReducer(chatReducer, initialState);
 
-  const simulateAIResponse = (input: string) => {
-    return fallbackResponseProvider.getResponse(input);
+  const fallbackResponse = () => {
+    return fallbackResponseProvider.getResponse();
   };
 
   const fetchAIResponse = async (input: string): Promise<string> => {
@@ -82,9 +82,9 @@ export function useChatReducer() {
     } catch (err) {
       if (err) err = `Static Fallback: ${err}`;
 
-      return simulateAIResponse(input);
+      return fallbackResponse();
     }
   };
 
-  return { state, dispatch, fetchAIResponse, simulateAIResponse };
+  return { state, dispatch, fetchAIResponse, fallbackResponse };
 }

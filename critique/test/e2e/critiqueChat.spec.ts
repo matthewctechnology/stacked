@@ -111,16 +111,16 @@ test.describe('Chat with Hybrid AI Response', () => {
     const input = page.getByPlaceholder('enter an idea');
     const button = page.getByRole('button', { name: 'submit' });
 
-    await input.fill('short');
+    await input.fill('first');
     await button.click();
-    await expect(page.getByTestId('user')).toHaveText('short');
+    await expect(page.getByTestId('user')).toHaveText('first');
     await expect(page.getByTestId('ai')).toBeVisible({ timeout: 2000 });
     await expect(page.getByTestId('ai')).toHaveText(MOCK_AI_RESPONSE.message);
     await expect(input).toBeEmpty();
 
-    await input.fill('elongated');
+    await input.fill('second');
     await button.click();
-    await expect(page.getByTestId('user')).toHaveText('elongated');
+    await expect(page.getByTestId('user')).toHaveText('second');
     await expect(page.getByTestId('ai')).toBeVisible({ timeout: 2000 });
     await expect(page.getByTestId('ai')).toHaveText(MOCK_AI_RESPONSE.message);
     await expect(input).toBeEmpty();
