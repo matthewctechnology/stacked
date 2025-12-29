@@ -16,6 +16,15 @@ export async function POST(req: NextRequest) {
   if (!token) {
     return new Response(JSON.stringify({ error: 'server misconfigured' }), { status: 500 });
   }
+  // return new Response(JSON.stringify({ error: 'no implementation' }), { status: 501 });
+
+  const systemMessage = ''.concat(
+    'You are a concise, logical, and safe creative critique assistant. ',
+    'Reference core design principles. ',
+    'Respond in paragraph form.'
+  )
+
+  const userMessage = input
 
   try {
     const openai = new OpenAI({
@@ -26,8 +35,8 @@ export async function POST(req: NextRequest) {
     const completion = await openai.chat.completions.create({
       model: MODEL,
       messages: [
-        { role: 'system', content: 'You are a concise, logical, and safe creative critique assistant. Reference core design principles. Respond in paragraph form.' },
-        { role: 'user', content: input }
+        { role: 'system', content: systemMessage },
+        { role: 'user', content: userMessage }
       ],
       max_tokens: MAX_TOKENS,
       temperature: 0.2,
