@@ -72,9 +72,9 @@ describe('useChatReducer', () => {
     expect(result.current.state.error).toBeNull();
   });
 
-  test('should simulate AI response as a string', () => {
+  test('should simulate AI response as a string', async () => {
     const { result } = renderHook(() => useChatReducer());
-    const response = result.current.fallbackResponse();
+    const response = await result.current.fallbackResponse();
 
     expect(typeof response).toBe('string');
     expect(response.length).toBeGreaterThan(0);
@@ -89,7 +89,7 @@ describe('useChatReducer', () => {
     const response = await result.current.fetchAIResponse('test');
 
     expect(typeof response).toBe('string');
-    expect(response.length).toBeGreaterThan(0);
+    expect(response?.length).toBeGreaterThan(0);
   });
 
   test('returns a static fallback response when fetch throws', async () => {
