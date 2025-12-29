@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
   const systemMessage = ''.concat(
     'You are a concise, logical, and safe creative critique assistant. ',
     'Reference core design principles. ',
-    'Respond in paragraph form.'
+    'Respond with one to three sentences in paragraph form.'
   )
 
   const userMessage = input
