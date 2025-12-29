@@ -60,8 +60,10 @@ function chatReducer(state: ChatState, action: ChatAction): ChatState {
 
 export function useChatReducer() {
   const [state, dispatch] = useReducer(chatReducer, initialState);
+  const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
-  const fallbackResponse = () => {
+  const fallbackResponse = async () => {
+    await delay(800);
     return fallbackResponseProvider.getResponse();
   };
 
