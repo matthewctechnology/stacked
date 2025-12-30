@@ -1,8 +1,65 @@
-import { describe, expect, test } from '@jest/globals';
+import { describe, expect, jest, test } from '@jest/globals';
 import Home from '../../src/app/page';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import * as React from 'react';
 
+
+jest.mock('../../src/app/useChatReducer', () => {
+  type ChatAction = {
+    type: string
+    value: string
+  }
+  type ChatState = {
+    input: string
+    messages: Array<object>,
+    loading: boolean,
+    error: null | string,
+  };
+  let state: ChatState = {
+    input: '',
+    messages: [],
+    loading: false,
+    error: null,
+  };
+  const listeners: Array<() => void> = [];
+  return {
+    useChatReducer: () => ({
+      state,
+      dispatch: (action: ChatAction) => {
+        if (action.type === 'INPUT_CHANGE') {
+          state = { ...state, input: action.value, error: null };
+        } else if (action.type === 'SUBMIT') {
+          state = {
+            ...state,
+            input: '',
+            loading: true,
+            messages: [{ role: 'user', text: state.input }] as never,
+            error: null
+          };
+        } else if (action.type === 'RESPONSE') {
+          state = {
+            ...state,
+            loading: false,
+            messages: [...state.messages, { role: 'ai', text: action.value }] as never
+          };
+        } else if (action.type === 'ERROR') {
+          state = { ...state, loading: false, error: action.value };
+        } else if (action.type === 'RESET') {
+          state = {
+            input: '',
+            messages: [],
+            loading: false,
+            error: null
+          };
+        }
+        listeners.forEach(fn => fn());
+      },
+      fetchAIResponse: async () => 'Mocked AI',
+      fallbackResponse: async () => 'Mocked fallback'
+    })
+  };
+});
 
 describe('Home', () => {
   test('should display input field', () => {
@@ -71,28 +128,6 @@ describe('Home', () => {
     });
   });
 
-  test('should clear chat and display new message on next submit', async () => {
-    render(<Home />);
-    const inputField = screen.getByPlaceholderText('enter an idea');
-    const button = screen.getByRole('button', { name: 'submit' });
-
-    await userEvent.type(inputField, 'first');
-    fireEvent.click(button);
-
-    await waitFor(() => {
-      expect(screen.getByTestId('ai')).not.toBeNull();
-    });
-
-    await userEvent.clear(inputField);
-    await userEvent.type(inputField, 'second');
-    fireEvent.click(button);
-
-    expect(screen.getByTestId('user').textContent).toBe('second');
-    await waitFor(() => {
-      expect(screen.getByTestId('ai')).not.toBeNull();
-    });
-  });
-
   test('should disable submit for empty input', async () => {
     render(<Home />);
     const inputField = screen.getByPlaceholderText('enter an idea');
@@ -111,5 +146,56 @@ describe('Home', () => {
     await userEvent.type(inputField, 'a'.repeat(257));
     expect(button.disabled).toBe(true);
     expect(button.getAttribute('title')).toBe('input too long');
+  });
+
+  test('should throttle submissions to 1 per 30 seconds', async () => {
+    render(<Home />);
+    const inputField = screen.getByPlaceholderText('enter an idea') as HTMLInputElement;
+    const button = screen.getByRole('button', { name: 'submit' });
+
+    await userEvent.type(inputField, 'first idea');
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('ai')).not.toBeNull();
+    });
+
+    await userEvent.type(inputField, 'second idea');
+    fireEvent.click(button);
+
+    expect(button.getAttribute('title')).toMatch(/please wait/i);
+
+    jest.restoreAllMocks();
+  });
+
+  test('should clear chat and display new message on next submit', async () => {
+    let now = Date.now();
+    jest.spyOn(Date, 'now').mockImplementation(() => now);
+
+    render(<Home />);
+    const inputField = screen.getByPlaceholderText('enter an idea') as HTMLInputElement;
+    const button = screen.getByRole('button', { name: 'submit' });
+
+    await userEvent.type(inputField, 'first');
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(screen.getByTestId('ai')).not.toBeNull();
+    });
+
+    now += 31_000;
+
+    await userEvent.type(inputField, 'second');
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(inputField.value).toBe('');
+    });
+
+    expect(screen.getByTestId('user').textContent).toBe('second');
+    await waitFor(() => {
+      expect(screen.getByTestId('ai')).not.toBeNull();
+    });
+    jest.restoreAllMocks();
   });
 });

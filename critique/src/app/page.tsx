@@ -1,23 +1,31 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useChatReducer } from './useChatReducer';
 import { validateInput } from './inputValidator';
 
+const THROTTLE_MS = 30_000;
 
 export function Chat() {
   const { state, dispatch, fetchAIResponse } = useChatReducer();
   const validation = validateInput(state.input);
+  const lastSubmitRef = useRef<number>(0);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: 'INPUT_CHANGE', value: e.target.value });
   };
 
   const handleSubmit = async () => {
+    const now = Date.now();
+    if (now - lastSubmitRef.current < THROTTLE_MS) {
+      dispatch({ type: 'ERROR', value: 'please wait' });
+      return;
+    }
     if (!validation.valid) {
       dispatch({ type: 'ERROR', value: validation.error || 'Invalid input.' });
       return;
     }
+    lastSubmitRef.current = now;
     dispatch({ type: 'SUBMIT' });
 
     const aiReply = await fetchAIResponse(state.input);
@@ -73,7 +81,13 @@ export function Chat() {
         onClick={handleSubmit}
         disabled={state.loading || !validation.valid}
         aria-label="submit"
-        title={!validation.valid ? validation.error : 'submit idea for critique'}
+        title={
+          !validation.valid
+            ? validation.error
+            : state.error
+            ? state.error
+            : 'submit idea for critique'
+        }
       >
         submit
       </button>

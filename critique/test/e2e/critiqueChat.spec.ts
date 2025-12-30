@@ -106,7 +106,7 @@ test.describe('Chat with Hybrid AI Response', () => {
     await expect(page.getByTestId('ai')).toHaveText(MOCK_AI_RESPONSE.message);
   });
 
-  test('should clear chat and text input on new submit', async ({ page }) => {
+  test('should clear chat and new submit with throttle', async ({ page }) => {
     await page.goto('/');
     const input = page.getByPlaceholder('enter an idea');
     const button = page.getByRole('button', { name: 'submit' });
@@ -120,10 +120,27 @@ test.describe('Chat with Hybrid AI Response', () => {
 
     await input.fill('second');
     await button.click();
+    await expect(button).toHaveAttribute('title', /please wait/i);
+
+    await page.evaluate(() => {
+      const originalNow = Date.now;
+      const fakeNow = originalNow();
+      Date.now = () => {
+        return fakeNow + 31_000;
+      };
+    });
+
+    await button.click();
     await expect(page.getByTestId('user')).toHaveText('second');
     await expect(page.getByTestId('ai')).toBeVisible({ timeout: 2000 });
     await expect(page.getByTestId('ai')).toHaveText(MOCK_AI_RESPONSE.message);
     await expect(input).toBeEmpty();
+
+    await page.evaluate(() => {
+      Date.now = (() => {
+        return (new Date()).getTime();
+      });
+    });
   });
 
   test('should reset chat on reload', async ({ page }) => {
