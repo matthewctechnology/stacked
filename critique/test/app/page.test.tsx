@@ -184,6 +184,7 @@ describe('Home', () => {
     });
 
     now += 31_000;
+    jest.spyOn(Date, 'now').mockImplementation(() => now);
 
     await userEvent.type(inputField, 'second');
     fireEvent.click(button);
