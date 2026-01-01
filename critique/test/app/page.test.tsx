@@ -1,8 +1,9 @@
-import { describe, expect, jest, test } from '@jest/globals';
+import { describe, jest, test } from '@jest/globals';
 import Home from '../../src/app/page';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import * as React from 'react';
+import '@testing-library/jest-dom';
 
 
 jest.mock('../../src/app/useChatReducer', () => {
@@ -64,26 +65,22 @@ jest.mock('../../src/app/useChatReducer', () => {
 describe('Home', () => {
   test('should display input field', () => {
     render(<Home />);
-    const expected = 'enter an idea';
-    const received = screen.getByPlaceholderText(expected).getAttribute('placeholder');
-
-    expect(received).toEqual(expected);
+    const input = screen.getByPlaceholderText('enter an idea');
+    expect(input).toBeInTheDocument();
+    expect(input).toHaveAttribute('placeholder', 'enter an idea');
   });
 
   test('should display submit button', () => {
     render(<Home />);
-    const expected = 'submit';
-    const received = screen.getByRole('button', { name: 'submit' }).textContent;
-
-    expect(received).toEqual(expected);
+    const button = screen.getByRole('button', { name: 'submit' });
+    expect(button).toBeInTheDocument();
+    expect(button).toHaveTextContent('submit');
   });
 
   test('should display disclaimer', () => {
     render(<Home />);
-    const expected = 'unvalidated responses inferred at individual risk';
-    const received = screen.queryByText(expected)?.textContent;
-
-    expect(received).toEqual(expected);
+    const disclaimer = screen.getByText('unvalidated responses inferred at individual risk');
+    expect(disclaimer).toBeInTheDocument();
   });
 
   test('should display thinking while loading', async () => {
@@ -94,9 +91,9 @@ describe('Home', () => {
     await userEvent.type(inputField, 'an idea');
     fireEvent.click(button);
 
-    expect(screen.queryByText('thinking...')).not.toBeNull();
+    expect(screen.getByText('thinking...')).toBeVisible();
     await waitFor(() => {
-      expect(screen.queryByText('thinking...')).toBeNull();
+      expect(screen.queryByText('thinking...')).not.toBeInTheDocument();
     });
   });
 
@@ -108,9 +105,9 @@ describe('Home', () => {
     await userEvent.type(inputField, 'an idea');
     fireEvent.click(button);
 
-    expect(screen.getByTestId('user').textContent).toBe('an idea');
+    expect(screen.getByTestId('user')).toHaveTextContent('an idea');
     await waitFor(() => {
-      expect(screen.getByTestId('ai')).not.toBeNull();
+      expect(screen.getByTestId('ai')).toBeInTheDocument();
     });
   });
 
@@ -123,8 +120,7 @@ describe('Home', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(inputField.textContent).toBe('');
-      expect(inputField.textContent).not.toBe('another idea');
+      expect(inputField).toHaveValue('');
     });
   });
 
@@ -134,8 +130,8 @@ describe('Home', () => {
     const button = screen.getByRole('button', { name: 'submit' }) as HTMLButtonElement;
 
     await userEvent.type(inputField, ' ');
-    expect(button.disabled).toBe(true);
-    expect(button.getAttribute('title')).toBe('input empty');
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute('title', 'input empty');
   });
 
   test('should disable submit for invalid input', async () => {
@@ -144,8 +140,8 @@ describe('Home', () => {
     const button = screen.getByRole('button', { name: 'submit' }) as HTMLButtonElement;
 
     await userEvent.type(inputField, 'a'.repeat(257));
-    expect(button.disabled).toBe(true);
-    expect(button.getAttribute('title')).toBe('input too long');
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute('title', 'input too long');
   });
 
   test('should throttle submissions to 1 per 30 seconds', async () => {
@@ -157,13 +153,13 @@ describe('Home', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(screen.getByTestId('ai')).not.toBeNull();
+      expect(screen.getByTestId('ai')).toBeInTheDocument();
     });
 
     await userEvent.type(inputField, 'second idea');
     fireEvent.click(button);
 
-    expect(button.getAttribute('title')).toMatch(/please wait/i);
+    expect(button).toHaveAttribute('title', expect.stringMatching(/please wait/i));
 
     jest.restoreAllMocks();
   });
@@ -180,7 +176,7 @@ describe('Home', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(screen.getByTestId('ai')).not.toBeNull();
+      expect(screen.getByTestId('ai')).toBeInTheDocument();
     });
 
     now += 31_000;
@@ -190,12 +186,12 @@ describe('Home', () => {
     fireEvent.click(button);
 
     await waitFor(() => {
-      expect(inputField.value).toBe('');
+      expect(inputField).toHaveValue('');
     });
 
-    expect(screen.getByTestId('user').textContent).toBe('second');
+    expect(screen.getByTestId('user')).toHaveTextContent('second');
     await waitFor(() => {
-      expect(screen.getByTestId('ai')).not.toBeNull();
+      expect(screen.getByTestId('ai')).toBeInTheDocument();
     });
     jest.restoreAllMocks();
   });
