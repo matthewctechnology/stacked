@@ -106,24 +106,41 @@ test.describe('Chat with Hybrid AI Response', () => {
     await expect(page.getByTestId('ai')).toHaveText(MOCK_AI_RESPONSE.message);
   });
 
-  test('should clear chat and text input on new submit', async ({ page }) => {
+  test('should clear chat and submit new with throttle', async ({ page }) => {
     await page.goto('/');
+
+    await page.evaluate(() => {
+      (window as unknown as { THROTTLE_MS: number }).THROTTLE_MS = 1000;
+    });
+
     const input = page.getByPlaceholder('enter an idea');
     const button = page.getByRole('button', { name: 'submit' });
 
     await input.fill('first');
     await button.click();
+
     await expect(page.getByTestId('user')).toHaveText('first');
     await expect(page.getByTestId('ai')).toBeVisible({ timeout: 2000 });
-    await expect(page.getByTestId('ai')).toHaveText(MOCK_AI_RESPONSE.message);
+    await expect(page.getByTestId('ai')).toHaveText('Mocked AI critique response');
     await expect(input).toBeEmpty();
 
     await input.fill('second');
+
+    await expect(button).toHaveText('submit');
+    await expect(button).toHaveAttribute('title', /please wait/i);
+
+    await page.waitForTimeout(500);
+
+    await expect(button).toBeEnabled();
     await button.click();
     await expect(page.getByTestId('user')).toHaveText('second');
     await expect(page.getByTestId('ai')).toBeVisible({ timeout: 2000 });
-    await expect(page.getByTestId('ai')).toHaveText(MOCK_AI_RESPONSE.message);
+    await expect(page.getByTestId('ai')).toHaveText('Mocked AI critique response');
     await expect(input).toBeEmpty();
+
+    await page.evaluate(() => {
+      delete (window as unknown as { THROTTLE_MS?: number }).THROTTLE_MS;
+    });
   });
 
   test('should reset chat on reload', async ({ page }) => {

@@ -1,23 +1,53 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useChatReducer } from './useChatReducer';
 import { validateInput } from './inputValidator';
 
 
+interface ThrottleWindow extends Window {
+  THROTTLE_MS?: number;
+}
+
+const getThrottleMs = (): number => {
+  if (typeof window !== 'undefined' && typeof (window as ThrottleWindow).THROTTLE_MS === 'number') {
+    return (window as ThrottleWindow).THROTTLE_MS!;
+  }
+  return 30_000;
+};
+
 export function Chat() {
   const { state, dispatch, fetchAIResponse } = useChatReducer();
   const validation = validateInput(state.input);
+  const lastSubmitRef = useRef<number | null>(null);
+  const [, forceUpdate] = useState(0);
+
+  const THROTTLE_MS = getThrottleMs();
+
+  const isThrottled =
+    lastSubmitRef.current !== null &&
+    Date.now() - lastSubmitRef.current < THROTTLE_MS;
+
+  useEffect(() => {
+    if (!isThrottled) return;
+    const remaining = THROTTLE_MS - (Date.now() - (lastSubmitRef.current || 0));
+    const timeout = setTimeout(() => forceUpdate(n => n + 1), remaining);
+    return () => clearTimeout(timeout);
+  }, [isThrottled, THROTTLE_MS]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch({ type: 'INPUT_CHANGE', value: e.target.value });
   };
 
   const handleSubmit = async () => {
+    if (isThrottled) return;
     if (!validation.valid) {
-      dispatch({ type: 'ERROR', value: validation.error || 'Invalid input.' });
+      dispatch({ type: 'ERROR', value: validation.error || 'invalid input' });
       return;
     }
+    lastSubmitRef.current = Date.now();
+    forceUpdate(n => n + 1);
+
     dispatch({ type: 'SUBMIT' });
 
     const aiReply = await fetchAIResponse(state.input);
@@ -71,9 +101,17 @@ export function Chat() {
       <button
         className="bg-black/[.05] font-mono font-semibold px-1 py-0.5 rounded ml-2"
         onClick={handleSubmit}
-        disabled={state.loading || !validation.valid}
+        disabled={state.loading || !validation.valid || isThrottled}
         aria-label="submit"
-        title={!validation.valid ? validation.error : 'submit idea for critique'}
+        title={
+          isThrottled
+            ? 'please wait'
+            : !validation.valid
+            ? validation.error
+            : state.error
+            ? state.error
+            : 'submit idea for critique'
+        }
       >
         submit
       </button>

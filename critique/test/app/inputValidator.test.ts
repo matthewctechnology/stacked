@@ -40,11 +40,21 @@ describe('validateInput', () => {
     expect(validateInput('DROP TABLE users')).toEqual({ valid: false, error: 'input forbidden' });
   });
 
+  test('should reject input with backticks, $ or \\', () => {
+    expect(validateInput('this has a `backtick`')).toEqual({ valid: false, error: 'input forbidden' });
+    expect(validateInput('this has a $dollar')).toEqual({ valid: false, error: 'input forbidden' });
+    expect(validateInput('this has a \\backslash')).toEqual({ valid: false, error: 'input forbidden' });
+  });
+
   test('should reject long input', () => {
     expect(validateInput('a'.repeat(257))).toEqual({ valid: false, error: 'input too long' });
   });
 
   test('should accept valid input', () => {
     expect(validateInput('creative idea')).toEqual({ valid: true });
+  });
+
+  test('should accept input with 64 tokens', () => {
+    expect(validateInput('a '.repeat(64))).toEqual({ valid: true });
   });
 });
