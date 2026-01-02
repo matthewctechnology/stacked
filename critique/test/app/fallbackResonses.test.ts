@@ -1,7 +1,9 @@
 import { fallbackResponseProvider } from '../../src/app/fallbackResponses';
 import { describe, jest, expect, test } from '@jest/globals';
 
-
+/**
+ * Tests fallbackResponseProvider.
+ */
 describe('fallbackResponseProvider', () => {
   test('returns fallback response', () => {
     const response = fallbackResponseProvider.getResponse();

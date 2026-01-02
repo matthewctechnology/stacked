@@ -2,7 +2,9 @@ import { describe, expect, jest, test } from '@jest/globals';
 import { renderHook, act } from '@testing-library/react';
 import { useChatReducer } from '../../src/app/useChatReducer';
 
-
+/**
+ * Tests useChatReducer custom hook.
+ */
 describe('useChatReducer', () => {
   test('should initialize with empty state', () => {
     const { result } = renderHook(() => useChatReducer());

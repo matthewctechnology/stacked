@@ -1,7 +1,13 @@
+/**
+ * Interface for providing fallback responses.
+ */
 export interface FallbackResponseProvider {
   getResponse: () => string;
 }
 
+/**
+ * Array of static fallback critique responses.
+ */
 const responses = [
   'When considering any concept, it is helpful to reflect on principles such as clarity, coherence, and usability. \
     Ensuring that elements are logically organized and easy to interpret can enhance both \
@@ -108,6 +114,9 @@ const responses = [
   '
 ];
 
+/**
+ * Provides a random fallback critique response.
+ */
 export const fallbackResponseProvider: FallbackResponseProvider = {
   getResponse: () => {
     try {
