@@ -1,12 +1,18 @@
 import type { NextRequest } from 'next/server';
 import OpenAI from 'openai';
 
+/**
+ * POST handler for the /api/critique endpoint.
+ * Accepts a JSON body with an 'input' string, validates it, and returns an AI critique response.
+ * Returns 400 for invalid input, 500 for missing token, 200 for success, 502 for AI API errors.
+ * @param req - Next.js API request object
+ * @returns Response with JSON { message: string } or { error: string }
+ */
+export async function POST(req: NextRequest): Promise<Response> {
+  const ENDPOINT = 'https://models.github.ai/inference';
+  const MODEL = 'openai/gpt-4.1';
+  const MAX_TOKENS = 256;
 
-const ENDPOINT = 'https://models.github.ai/inference';
-const MODEL = 'openai/gpt-4.1';
-const MAX_TOKENS = 256;
-
-export async function POST(req: NextRequest) {
   const { input } = await req.json();
   if (!input || typeof input !== 'string' || input.length > 256) {
     return new Response(JSON.stringify({ error: 'invalid input' }), { status: 400 });
