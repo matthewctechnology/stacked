@@ -9,7 +9,9 @@ describe('fallbackResponseProvider', () => {
   });
 
   test('returns fallback error response', () => {
-    fallbackResponseProvider.getResponse = jest.fn(fallbackResponseProvider.getResponse).mockReturnValue('Unable to critique because of Error.');
+    fallbackResponseProvider.getResponse = jest.fn(
+      fallbackResponseProvider.getResponse
+    ).mockReturnValue('Unable to critique because of Error.');
     const response = fallbackResponseProvider.getResponse();
     expect(response).toMatch(/Unable to critique/i);
   });

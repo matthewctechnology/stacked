@@ -21,9 +21,9 @@ export async function POST(req: NextRequest) {
     'You are a concise, logical, and safe creative critique assistant. ',
     'Reference core design principles. ',
     'Respond with one to three sentences in paragraph form.'
-  )
+  );
 
-  const userMessage = input
+  const userMessage = input;
 
   try {
     const openai = new OpenAI({

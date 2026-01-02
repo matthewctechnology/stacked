@@ -82,7 +82,7 @@ describe('useChatReducer', () => {
 
   test('should fetchAIResponse fallback to static response on API error', async () => {
     const { result } = renderHook(() => useChatReducer());
-    const err = new Error('API unavailable')
+    const err = new Error('API unavailable');
 
     global.fetch = jest.fn().mockRejectedValue(err as never) as typeof fetch;
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { JSX, useEffect, useRef, useState } from 'react';
 import { useChatReducer } from './useChatReducer';
 import { validateInput } from './inputValidator';
 
@@ -16,7 +16,7 @@ const getThrottleMs = (): number => {
   return 30_000;
 };
 
-export function Chat() {
+export function Chat(): JSX.Element {
   const { state, dispatch, fetchAIResponse } = useChatReducer();
   const validation = validateInput(state.input);
   const lastSubmitRef = useRef<number | null>(null);
@@ -119,15 +119,17 @@ export function Chat() {
   );
 }
 
-export default function Home() {
+export default function Home(): JSX.Element {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
+    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen
+      p-8 pb-20 gap-16 sm:p-20">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <div className="flex gap-4 items-center flex-col sm:flex-row">
           <Chat />
         </div>
       </main>
-      <footer className="bg-black/[.05] text-white/25 text-[9px] font-mono font-semibold row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
+      <footer className="bg-black/[.05] text-white/25 text-[9px] font-mono font-semibold row-start-3
+        flex gap-[24px] flex-wrap items-center justify-center">
         <p>unvalidated responses inferred at individual risk</p>
       </footer>
     </div>

@@ -1,6 +1,5 @@
 import { fallbackResponseProvider } from '../../src/app/fallbackResponses';
-import { useReducer } from 'react';
-
+import { useReducer, Dispatch } from 'react';
 
 type Message = {
   role: 'user' | 'ai';
@@ -20,6 +19,13 @@ type ChatAction =
   | { type: 'RESPONSE'; value: string }
   | { type: 'ERROR'; value: string }
   | { type: 'RESET' };
+
+export interface UseChatReducerResult {
+  state: ChatState;
+  dispatch: Dispatch<ChatAction>;
+  fetchAIResponse: (input: string) => Promise<string>;
+  fallbackResponse: () => Promise<string>;
+}
 
 const initialState: ChatState = {
   input: '',
@@ -58,7 +64,7 @@ function chatReducer(state: ChatState, action: ChatAction): ChatState {
   }
 }
 
-export function useChatReducer() {
+export function useChatReducer(): UseChatReducerResult {
   const [state, dispatch] = useReducer(chatReducer, initialState);
   const delay = (ms: number) => new Promise(res => setTimeout(res, ms));
 
