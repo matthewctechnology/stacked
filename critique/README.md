@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Critique App
 
-## Getting Started
+A web application for AI-powered creative idea critique.
 
-First, run the development server:
+## Overview
+
+Critique allows users to submit creative ideas and receive concise, logical feedback based on design principles.
+The app is built with Next.js, TypeScript, TailwindCSS, and OpenAI.
+
+## Features
+
+- Modern, clean UI with light/dark mode toggle
+- Secure input validation
+- Hybrid AI/static fallback for reliability
+- Fully tested with Jest, React Testing Library, and Playwright
+
+## Full Start
+
+### Prerequisites
+
+- Node.js 22+
+- npm
+
+### Install dependencies
+
+```bash
+cd critique
+npm ci
+```
+
+### Run in Development (Dynamic AI)
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit [http://localhost:3000](http://localhost:3000). Or `<codespace>-3000.app.github.dev`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+> **Note:** For dynamic AI, set `GITHUB_TOKEN` in your environment for OpenAI API access.
+> In a codespace, `GITHUB_TOKEN` is already in your environment.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Run Static Build (for GitHub Pages)
 
-## Learn More
+```bash
+npm run build
+npx serve@latest out
+```
 
-To learn more about Next.js, take a look at the following resources:
+Visit [http://localhost:3000](http://localhost:3000).  Or `<codespace>-3000.app.github.dev`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Run Tests
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+npm run lint && npm run test && npm run test:e2e
+```
 
-## Deploy on Vercel
+## Project Structure
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `/src`: Frontend source code
+- `/test`: Unit and e2e tests
+- `/public`: Shared assets
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Security
+
+- All user input is validated and sanitized.
+- The app is designed to mitigate OWASP Top 10 risks.
+
+## License
+
+MIT (next.js)
