@@ -1,7 +1,9 @@
 import { fallbackResponseProvider } from '../../src/app/fallbackResponses';
 import { describe, jest, expect, test } from '@jest/globals';
 
-
+/**
+ * Tests fallbackResponseProvider.
+ */
 describe('fallbackResponseProvider', () => {
   test('returns fallback response', () => {
     const response = fallbackResponseProvider.getResponse();
@@ -9,7 +11,9 @@ describe('fallbackResponseProvider', () => {
   });
 
   test('returns fallback error response', () => {
-    fallbackResponseProvider.getResponse = jest.fn(fallbackResponseProvider.getResponse).mockReturnValue('Unable to critique because of Error.');
+    fallbackResponseProvider.getResponse = jest.fn(
+      fallbackResponseProvider.getResponse
+    ).mockReturnValue('Unable to critique because of Error.');
     const response = fallbackResponseProvider.getResponse();
     expect(response).toMatch(/Unable to critique/i);
   });

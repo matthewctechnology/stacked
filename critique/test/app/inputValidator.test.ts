@@ -1,7 +1,9 @@
 import { describe, expect, test } from '@jest/globals';
 import { validateInput } from '../../src/app/inputValidator';
 
-
+/**
+ * Tests validateInput.
+ */
 describe('validateInput', () => {
   test('should reject empty input', () => {
     expect(validateInput('')).toEqual({ valid: false, error: 'input empty' });

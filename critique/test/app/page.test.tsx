@@ -5,7 +5,9 @@ import userEvent from '@testing-library/user-event';
 import * as React from 'react';
 import '@testing-library/jest-dom';
 
-
+/**
+ * Mocks useChatReducer for Home component tests.
+ */
 jest.mock('../../src/app/useChatReducer', () => {
   type ChatAction = {
     type: string
@@ -62,6 +64,9 @@ jest.mock('../../src/app/useChatReducer', () => {
   };
 });
 
+/**
+ *  Tests Home page and Chat component.
+ */
 describe('Home', () => {
   test('should display input field', () => {
     render(<Home />);

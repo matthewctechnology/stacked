@@ -1,6 +1,8 @@
 import { test, expect } from '@playwright/test';
 
-
+/**
+ * Tests critique app end-to-end.
+ */
 const MOCK_AI_RESPONSE = { message: 'Mocked AI critique response' };
 
 const delay = (ms: number) => new Promise(res => setTimeout(res, ms));

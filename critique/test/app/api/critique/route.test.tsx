@@ -23,6 +23,9 @@ jest.mock('openai', () => {
 
 const mockEnv = process.env;
 
+/**
+ * Tests /api/critique API route.
+ */
 describe('/api/critique API route', () => {
   beforeEach(() => {
     jest.resetModules();

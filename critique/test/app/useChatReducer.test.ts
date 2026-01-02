@@ -2,7 +2,9 @@ import { describe, expect, jest, test } from '@jest/globals';
 import { renderHook, act } from '@testing-library/react';
 import { useChatReducer } from '../../src/app/useChatReducer';
 
-
+/**
+ * Tests useChatReducer custom hook.
+ */
 describe('useChatReducer', () => {
   test('should initialize with empty state', () => {
     const { result } = renderHook(() => useChatReducer());
@@ -82,7 +84,7 @@ describe('useChatReducer', () => {
 
   test('should fetchAIResponse fallback to static response on API error', async () => {
     const { result } = renderHook(() => useChatReducer());
-    const err = new Error('API unavailable')
+    const err = new Error('API unavailable');
 
     global.fetch = jest.fn().mockRejectedValue(err as never) as typeof fetch;
 

@@ -1,15 +1,23 @@
-const forbiddenPatterns = [
-  /{{.*}}/i,
-  /<script.*?>.*?<\/script>/i,
-  /\b(system|user|assistant)\b/i,
-  /\b(select|insert|delete|drop|update)\b/i,
-  /\b(alert|confirm|prompt)\b/i,
-  /[`$\\]/,
-];
+/**
+ * Validates user input for critique app.
+ * Checks for forbidden patterns, temperature, and length.
+ * @param input - User input string
+ * @returns Object indicating validity and an optional error message
+ */
+export const validateInput = (
+  input: string,
+): { valid: boolean; error?: string } => {
+  const forbiddenPatterns = [
+    /{{.*}}/i,
+    /<script.*?>.*?<\/script>/i,
+    /\b(system|user|assistant)\b/i,
+    /\b(select|insert|delete|drop|update)\b/i,
+    /\b(alert|confirm|prompt)\b/i,
+    /[`$\\]/,
+  ];
 
-const temperaturePattern = /\btemperature\s*[:=]\s*(-?\d+(\.\d+)?)/i;
+  const temperaturePattern = /\btemperature\s*[:=]\s*(-?\d+(\.\d+)?)/i;
 
-export const validateInput = (input: string): { valid: boolean; error?: string } => {
   if (!input.trim()) {
     return { valid: false, error: 'input empty' };
   }

@@ -1,6 +1,6 @@
-const nextJest = require('next/jest')
+const nextJest = require('next/jest');
 
-const createJestConfig = nextJest({ dir: './' })
+const createJestConfig = nextJest({ dir: './' });
 
 const customJestConfig = {
   transform: {
@@ -9,6 +9,6 @@ const customJestConfig = {
   testEnvironment: 'jsdom',
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   testMatch: ['**/?(*.)+(test).+(ts|tsx|js)'],
-}
+};
 
-module.exports = createJestConfig(customJestConfig)
+module.exports = createJestConfig(customJestConfig);
