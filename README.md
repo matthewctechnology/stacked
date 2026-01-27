@@ -5,6 +5,8 @@ Stacked - A Monorepo
 
 `stacked` is a monorepo for personal portfolio project(s).
 
+`ideate` tool is a command line interface and web application that allows users to prompt an AI agent to get a creative idea that is novel, viable, and valuable.
+
 `critique` contains a web application that allows users to prompt an AI agent to critique a creative idea so they can get feedback on a proposal, such as, objectively if the idea is novel, viable, or valuable.
 
 [critique app](https://matthewctechnology.github.io/stacked/) is hosted on GitHub Pages and can be browsed without a development environment for static AI interaction.
