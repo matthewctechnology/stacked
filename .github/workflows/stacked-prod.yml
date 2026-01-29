@@ -1,4 +1,4 @@
-name: critique-prod
+name: stacked-prod
 on:
   push:
     branches:
@@ -8,9 +8,6 @@ permissions:
   contents: read
   pages: write
   id-token: write
-defaults:
-  run:
-    working-directory: ./critique
 concurrency:
   group: pages
   cancel-in-progress: false
@@ -19,6 +16,9 @@ jobs:
     environment:
       name: critique-prod
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./critique
     steps:
       - name: Checkout stacked
         uses: actions/checkout@v5

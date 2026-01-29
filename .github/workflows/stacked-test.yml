@@ -1,16 +1,16 @@
-name: critique-test
+name: stacked-test
 on:
   pull_request:
     branches:
       - main
-defaults:
-  run:
-    working-directory: ./critique
 jobs:
   critique-test:
     environment:
       name: critique-test
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./critique
     steps:
       - name: Checkout stacked
         uses: actions/checkout@v5
