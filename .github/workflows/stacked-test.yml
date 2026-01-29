@@ -1,4 +1,4 @@
-name: critique-test
+name: stacked-test
 on:
   pull_request:
     branches:

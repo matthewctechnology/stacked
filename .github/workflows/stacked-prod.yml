@@ -1,4 +1,4 @@
-name: critique-prod
+name: stacked-prod
 on:
   push:
     branches:
