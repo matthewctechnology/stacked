@@ -1,0 +1,31 @@
+# ignore virtual environments
+lib/
+bin/
+include/
+env/
+.env/
+.venv/
+.ideate
+
+# ignore
+doc/*/_build
+doc/*/.doctrees
+build/
+dist/
+.eggs/
+*.egg-info
+/pylint.egg-info/
+htmlcov/
+issue/
+.cache
+.pytest_cache
+pytestdebug.log
+.coverage
+.coverage.*
+coverage.xml
+.project
+.settings
+.vscode
+.Python/
+__pycache__/
+.python-version
