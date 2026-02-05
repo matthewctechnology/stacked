@@ -6,3 +6,44 @@ A command line interface and web application for AI-powered creative idea genera
 
 Ideate allows users to generate creative ideas based on a topic.
 The app is built with FastAPI, Python, Pydantic, and OpenAI.
+
+## Features
+
+- Modern, clean UI in dark mode
+- Secure input and interaction
+- Hybrid AI/static fallback for reliability
+- Fully tested with Pylint and Pytest
+
+## Full Start
+
+### Prerequisites
+
+- Python 3.11+ (3.12.1)
+
+### Install dependencies
+
+```bash
+cd ideate
+python3 -m venv .ideate
+source .ideate/bin/activate
+python3 -m pip install -r requirements.txt
+```
+
+### Run CLI
+
+```bash
+source .ideate/bin/activate
+python3 cli/ideate.py
+```
+
+### Run Tests
+
+```bash
+pylint ideate tests && pytest tests
+```
+
+## Security
+
+- The app is designed to mitigate OWASP Top 10 risks.
+
+## License

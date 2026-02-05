@@ -15,6 +15,11 @@ Stacked - A Monorepo
 
 ## Quickstart
 
+`ideate` tool
+- `cd ideate`
+- `source .ideate/bin/activate`
+- `python cli/ideate.py`
+
 `critique` app
 - `cd critique`
 - `npm run dev`
@@ -22,6 +27,12 @@ Stacked - A Monorepo
 
 ## Libraries and Frameworks
 
+`ideate` tool
+- Python
+- Pylint
+- Pytest
+
+`critique` app
 - TypeScript
 - NextJS
 - TailwindCSS
