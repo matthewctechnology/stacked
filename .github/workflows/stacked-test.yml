@@ -4,6 +4,34 @@ on:
     branches:
       - main
 jobs:
+  ideate-test:
+    environment:
+      name: ideate-test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ideate
+    strategy:
+      matrix:
+        python-version: [3.12.1]
+    steps:
+      - name: Checkout stacked
+        uses: actions/checkout@v6
+      - name: Configure ideate
+        uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+      - name: Install ideate
+        run: |
+          python3 -m venv .ideate
+          source .ideate/bin/activate
+          python3 -m pip install --upgrade pip setuptools wheel
+          python3 -m pip install -r requirements.txt
+      - name: Lint ideate
+        run: pylint ideate
+      - name: Test ideate
+        run: pytest tests
   critique-test:
     environment:
       name: critique-test
