@@ -4,6 +4,8 @@ The stacked repository contains different capabilities defined by sub-directorie
 
 `critique` contains a web application that allows users to prompt an AI agent to critique a creative idea so they can get feedback on a proposal, such as, objectively if the idea is novel, viable, or valuable.
 
+`ideate` tool is a command line interface and web application that allows users to prompt an AI agent to get a creative idea that is novel, viable, and valuable.
+
 ## Folder Structure
 
 - `/stacked`: Contains source code for all apps
@@ -13,6 +15,9 @@ The stacked repository contains different capabilities defined by sub-directorie
 - `critique/server`: Contains critique Node.js backend
 - `critique/public`: Contains critique shared implementation
 - `critique/test`: Contains critique tests
+
+- `ideate/cli`: Contains ideate command line interface
+- `ideate/tests`: Contains ideate tests
 
 ## Libraries and Frameworks
 
@@ -25,6 +30,16 @@ The stacked repository contains different capabilities defined by sub-directorie
 - ESLint
 - Jest
 - React Testing Library
+- Playwright
+
+`ideate` Tool
+- Python
+- Streamlit
+- Pydantic
+- Typer
+- OpenAI SDK
+- Pylint
+- Pytest
 - Playwright
 
 ## Coding Standards
@@ -41,6 +56,12 @@ TypeScript / JavaScript
 - Use arrow functions for callbacks
 - Test units with Jest when possible and provide brief caveat when not possible
 - Test with React Testing Library to ensure renders and async work with frameworks
+- Test end-to-end with Playwright
+
+Python
+- Use docstrings for all files and functions including tests
+- Use type annotations for arguments and returns
+- Test units Pytest when possible and provide brief caveat when not possible
 - Test end-to-end with Playwright
 
 ## UI guidelines
