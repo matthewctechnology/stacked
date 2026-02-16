@@ -45,10 +45,10 @@ TypeScript / JavaScript
 
 ## UI guidelines
 
-- Application should have a modern and clean design that follows typical NextJS and Tailwind style.
-- A toggle is provided to switch between light and dark mode
-- Core interface consists of a single page with a component to input text into the chat and component to view chat history
-- Site navigation and settings should be hidden and disclosed by hamburger menu
+- Application should have a modern and clean design
+- Web interface consists of a single page with chat input and history
+- Site navigation and settings should be hidden and disclosed by menu
+- Command line interface follows typical shell idioms and flows
 
 ## Security guidelines
 
