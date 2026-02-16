@@ -1,51 +1,85 @@
 # Project Overview
 
-This project is a web application the allows the user to engage in dialog with AI models.
+The stacked repository contains different capabilities defined by sub-directories, primarily software applications that allows engagement with AI models.
 
-The AI Web Application will allow users to prompt an agent to critique a creative idea so they can get feedback on a proposal, such as, objectively if the idea is novel, viable, or valuable.
+`critique` contains a web application that allows users to prompt an AI agent to critique a creative idea so they can get feedback on a proposal, such as, objectively if the idea is novel, viable, or valuable.
+
+`ideate` tool is a command line interface and web application that allows users to prompt an AI agent to get a creative idea that is novel, viable, and valuable.
 
 ## Folder Structure
 
-- `/src`: Contains the source code for the frontend.
-- `/server`: Contains the source code for the Node.js backend.
-- `/public`: Contains shared implementation source code.
-- `.github/copilot-instructions.md`: Contains repository specific Copilot instructions
+- `/stacked`: Contains source code for all apps
+- `.github/copilot-instructions.md`: Contains Copilot instructions
+
+- `critique/src`: Contains critique frontend
+- `critique/server`: Contains critique Node.js backend
+- `critique/public`: Contains critique shared implementation
+- `critique/test`: Contains critique tests
+
+- `ideate/cli`: Contains ideate command line interface
+- `ideate/tests`: Contains ideate tests
 
 ## Libraries and Frameworks
 
+`critique` App
 - TypeScript
 - NextJS
 - TailwindCSS
 - NodeJS
+- OpenAI SDK
 - ESLint
 - Jest
-- SuperTest
+- React Testing Library
+- Playwright
+
+`ideate` Tool
+- Python
+- Streamlit
+- Pydantic
+- Typer
+- OpenAI SDK
+- Pylint
+- Pytest
+- Playwright
 
 ## Coding Standards
 
+Overall
 - Optimize for security and simplicity
+- Structure for incremental evolution
+- Preference for idiomatic solutions
+
+TypeScript / JavaScript
 - Use semicolons at the end of each statement
 - Use single quotes for strings
 - Use function based react components in Next
 - Use arrow functions for callbacks
-- Always provide a filename with relative path for where the code should be located in the repository
-- Always provide a seperate test for suggested code
 - Test units with Jest when possible and provide brief caveat when not possible
 - Test with React Testing Library to ensure renders and async work with frameworks
 - Test end-to-end with Playwright
 
+Python
+- Use docstrings for all files and functions including tests
+- Use type annotations for arguments and returns
+- Test units Pytest when possible and provide brief caveat when not possible
+- Test end-to-end with Playwright
+
 ## UI guidelines
 
-- Application should have a modern and clean design that follows typical NextJS and Tailwind style.
-- A toggle is provided to switch between light and dark mode
-- Core interface consists of a single page with a component to input text into the chat and component to view chat history
-- Site navigation and settings should be hidden and disclosed by hamburger menu
+- Application should have a modern and clean design
+- Web interface consists of a single page with chat input and history
+- Site navigation and settings should be hidden and disclosed by menu
+- Command line interface follows typical shell idioms and flows
 
 ## Security guidelines
 
 - Application should migitigate risk of the OWASP Top 10
 - Inputs should be validated for malicious content
 - Inputs should be reviewed for temprature and submit button disabled for high temprature text in the input field
+
+## Example and Recommendation Styles
+- Always provide a filename with relative path for where the code should be located in the repository
+- Always provide a seperate test for suggested code
 
 ## Expectations
 
