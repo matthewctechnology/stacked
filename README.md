@@ -18,7 +18,8 @@ Stacked - A Monorepo
 `ideate` tool
 - `cd ideate`
 - `source .ideate/bin/activate`
-- `python cli/ideate.py`
+- `cd /workspaces/stacked`
+- `python3 -m ideate.cli.ideate`
 
 `critique` app
 - `cd critique`

@@ -32,8 +32,10 @@ python3 -m pip install -r requirements.txt
 ### Run CLI
 
 ```bash
+cd ideate
 source .ideate/bin/activate
-python3 cli/ideate.py
+cd /workspaces/stacked
+python3 -m ideate.cli.ideate
 ```
 
 ### Run Tests
