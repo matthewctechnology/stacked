@@ -21,7 +21,8 @@ The stacked repository contains different capabilities defined by sub-directorie
 
 ## Libraries and Frameworks
 
-`critique` App
+### `critique` App
+
 - TypeScript
 - NextJS
 - TailwindCSS
@@ -32,7 +33,8 @@ The stacked repository contains different capabilities defined by sub-directorie
 - React Testing Library
 - Playwright
 
-`ideate` Tool
+### `ideate` Tool
+
 - Python
 - Streamlit
 - Pydantic
@@ -44,12 +46,14 @@ The stacked repository contains different capabilities defined by sub-directorie
 
 ## Coding Standards
 
-Overall
+### Overall
+
 - Optimize for security and simplicity
 - Structure for incremental evolution
 - Preference for idiomatic solutions
 
-TypeScript / JavaScript
+### TypeScript / JavaScript
+
 - Use semicolons at the end of each statement
 - Use single quotes for strings
 - Use function based react components in Next
@@ -58,7 +62,11 @@ TypeScript / JavaScript
 - Test with React Testing Library to ensure renders and async work with frameworks
 - Test end-to-end with Playwright
 
-Python
+### Python
+
+- Use double quotes for strings
+- Use f-strings and not string format
+- Use trailing comma for multiline statements
 - Use docstrings for all files and functions including tests
 - Use type annotations for arguments and returns
 - Test units Pytest when possible and provide brief caveat when not possible
@@ -78,6 +86,7 @@ Python
 - Inputs should be reviewed for temprature and submit button disabled for high temprature text in the input field
 
 ## Example and Recommendation Styles
+
 - Always provide a filename with relative path for where the code should be located in the repository
 - Always provide a seperate test for suggested code
 
