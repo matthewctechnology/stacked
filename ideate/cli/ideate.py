@@ -1,26 +1,19 @@
 """
 CLI entrypoint for ideate tool.
 """
-import sys
-import os
+import typer
 from ideate.fallback.fallback_provider import get_fallback_idea
 
 
-# Allows running as a script: adds parent directory to sys.path
-if __name__ == "__main__" and __package__ is None:
-    sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+app = typer.Typer(help="ideate Tool - Generates a creative idea.")
 
-
-def ideate() -> str:
+@app.command()
+def ideate() -> None:
     """
-    Prints and returns creative idea from fallback provider.
-
-    :return: A selected idea.
+    Generates a creative idea.
     """
-    idea = get_fallback_idea()
-    print(idea)
-
-    return idea
+    idea: str = get_fallback_idea()
+    typer.echo(idea)
 
 if __name__ == "__main__":
-    ideate()
+    app()

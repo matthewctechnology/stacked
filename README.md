@@ -16,7 +16,7 @@ Stacked - A Monorepo
 ## Quickstart
 
 `ideate` tool
-- `cd ideate`
+- `cd /workspaces/stacked/ideate`
 - `source .ideate/bin/activate`
 - `cd /workspaces/stacked`
 - `python3 -m ideate.cli.ideate`
@@ -30,6 +30,7 @@ Stacked - A Monorepo
 
 `ideate` tool
 - Python
+- Typer
 - Pylint
 - Pytest
 

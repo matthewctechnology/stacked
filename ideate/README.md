@@ -23,7 +23,7 @@ The app is built with FastAPI, Python, Pydantic, and OpenAI.
 ### Install dependencies
 
 ```bash
-cd ideate
+cd /workspaces/stacked/ideate
 python3 -m venv .ideate
 source .ideate/bin/activate
 python3 -m pip install -r requirements.txt
@@ -32,7 +32,7 @@ python3 -m pip install -r requirements.txt
 ### Run CLI
 
 ```bash
-cd ideate
+cd /workspaces/stacked/ideate
 source .ideate/bin/activate
 cd /workspaces/stacked
 python3 -m ideate.cli.ideate
@@ -41,6 +41,7 @@ python3 -m ideate.cli.ideate
 ### Run Tests
 
 ```bash
+cd /workspaces/stacked/ideate
 pylint ideate tests && pytest tests
 ```
 
