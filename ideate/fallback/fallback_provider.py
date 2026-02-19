@@ -11,7 +11,7 @@ def get_fallback_idea() -> str:
     """
     Returns random idea from the fallback responses.
 
-    :return: A creative idea string.
+    :return: string
     """
     fallback_ideas: List = responses
 
