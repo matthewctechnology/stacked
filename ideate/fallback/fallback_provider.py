@@ -3,6 +3,7 @@ Provides random fallback idea from the predetermined list.
 """
 import random
 from typing import List
+
 from ideate.fallback.fallback_responses import responses
 
 
