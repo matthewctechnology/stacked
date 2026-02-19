@@ -36,6 +36,7 @@ cd /workspaces/stacked/ideate
 source .ideate/bin/activate
 cd /workspaces/stacked
 python3 -m ideate.cli.ideate
+python3 -m ideate.cli.ideate --topic <topic>
 ```
 
 ### Run Tests
