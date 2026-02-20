@@ -9,7 +9,7 @@ import os
 import typer
 
 from ideate.fallback.fallback_provider import get_fallback_idea
-from ideate.option.option_provider import get_topics
+from ideate.option.option_provider import autocomplete_topics, get_topics
 
 
 app = typer.Typer(help="ideate Tool - Prints a creative idea.")
@@ -21,6 +21,7 @@ def ideate(
         "--topic",
         "-t",
         help="Selects ideation topic.",
+        autocompletion=autocomplete_topics,
     ),
 ) -> None:
     """

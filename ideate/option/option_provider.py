@@ -14,3 +14,10 @@ def get_topics() -> List[str]:
     """
 
     return sorted(topics)
+
+def autocomplete_topics(incomplete: str) -> List[str]:
+    """
+    Autocompletes topics for the --topic option.
+    """
+
+    return [t for t in get_topics() if t.lower().startswith(incomplete.lower())]
