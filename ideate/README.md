@@ -35,7 +35,9 @@ python3 -m pip install -r requirements.txt
 cd /workspaces/stacked/ideate
 source .ideate/bin/activate
 cd /workspaces/stacked
-python3 -m ideate.cli.ideate
+python3 -m ideate.cli.ideate ideate
+python3 -m ideate.cli.ideate topics
+python3 -m ideate.cli.ideate ideate --topic <topic>
 ```
 
 ### Run Tests

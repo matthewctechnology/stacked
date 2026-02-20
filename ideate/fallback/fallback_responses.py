@@ -1,8 +1,10 @@
 """
 Predetermines fallback creative ideas for ideate tool.
 """
+from typing import List
 
-responses = [
+
+responses: List[str] = [
     "An umbrella that appears when it rains",
     "A pen that never runs out of ink",
     "A shirt that cleans itself",
