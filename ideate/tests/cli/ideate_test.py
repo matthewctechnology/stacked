@@ -19,7 +19,7 @@ def test_ideate_cli() -> None:
     """
     Tests ideate CLI prints a valid fallback idea.
     """
-    result = runner.invoke(app)
+    result = runner.invoke(app, ["ideate"])
 
     assert result.exit_code == 0
     assert result.output.strip() in responses
@@ -36,16 +36,35 @@ def test_ideate_cli_fail() -> None:
     """
     Tests ideate CLI failure.
     """
-    result = runner.invoke(app, ["ideate"])
+    result = runner.invoke(app)
 
     assert result.exit_code == 2
+
+def test_ideate_cli_no_topic() -> None:
+    """
+    Tests ideate CLI with no topic.
+    """
+    result = runner.invoke(app, ["ideate"])
+
+    assert result.exit_code == 0
+    assert "Idea:" not in result.output
+
+def test_topics_command() -> None:
+    """
+    Tests topics command prints all topics.
+    """
+    result = runner.invoke(app, ["topics"])
+
+    assert result.exit_code == 0
+    for t in topics:
+        assert t in result.output
 
 def test_ideate_cli_with_topic() -> None:
     """
     Tests ideate CLI with topic selection.
     """
     topic = topics[1]
-    result = runner.invoke(app, ["--topic", topic])
+    result = runner.invoke(app, ["ideate", "--topic", topic])
 
     assert result.exit_code == 0
     assert result.output.startswith(f"{topic} Idea:")
@@ -56,19 +75,10 @@ def test_ideate_cli_with_lowercase_topic() -> None:
     """
     topic = topics[1]
     lowercase_topic = topic.lower()
-    result = runner.invoke(app, ["--topic", lowercase_topic])
+    result = runner.invoke(app, ["ideate", "--topic", lowercase_topic])
 
     assert result.exit_code == 0
     assert result.output.startswith(f"{topic} Idea:")
-
-def test_ideate_cli_no_topic() -> None:
-    """
-    Tests ideate CLI with no topic.
-    """
-    result = runner.invoke(app)
-
-    assert result.exit_code == 0
-    assert "Idea:" not in result.output
 
 def test_ideate_cli_with_topic_delay() -> None:
     """
@@ -77,7 +87,7 @@ def test_ideate_cli_with_topic_delay() -> None:
     os.environ["IDEATE_TEST_MODE"] = "0"
     topic = topics[1]
     start = time.time()
-    result = runner.invoke(app, ["--topic", topic])
+    result = runner.invoke(app, ["ideate", "--topic", topic])
     elapsed = time.time() - start
 
     assert result.exit_code == 0

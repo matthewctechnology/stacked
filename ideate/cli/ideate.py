@@ -20,7 +20,7 @@ def ideate(
         None,
         "--topic",
         "-t",
-        help="Selects ideation topic",
+        help="Selects ideation topic.",
     ),
 ) -> None:
     """
@@ -40,6 +40,14 @@ def ideate(
         typer.echo(f"{canonical_topic} Idea: {idea}")
     else:
         typer.echo(idea)
+
+@app.command("topics")
+def echo_topics() -> None:
+    """
+    Echos all available ideation topics.
+    """
+    for t in get_topics():
+        typer.echo(f"{t}")
 
 def _normalize_topic(topic: Optional[str], topics: List[str]) -> Optional[str]:
     """
