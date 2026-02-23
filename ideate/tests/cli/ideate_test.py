@@ -63,15 +63,15 @@ def test_ideate_cli_invalid_topic_suggests() -> None:
     """
     Tests ideate CLI with invalid topic prints suggestions.
     """
-    result = runner.invoke(app, ["ideate", "--topic", "Trave"])
+    result = runner.invoke(app, ["ideate", "--topic", "A"])
     assert result.exit_code == 1
-    assert "Did you mean: Travel" in result.output
+    assert "Did you mean: Adventure, Art?" in result.output
 
 def test_ideate_cli_invalid_topic_no_suggestions() -> None:
     """
     Tests ideate CLI with invalid topic prints no suggestions.
     """
-    result = runner.invoke(app, ["ideate", "--topic", "Xyz"])
+    result = runner.invoke(app, ["ideate", "--topic", " "])
     assert result.exit_code == 1
     assert "Invalid topic selected." in result.output
 
@@ -79,7 +79,7 @@ def test_ideate_cli_with_topic() -> None:
     """
     Tests ideate CLI with topic selection.
     """
-    topic = topics[1]
+    topic = topics[3]
     result = runner.invoke(app, ["ideate", "--topic", topic])
 
     assert result.exit_code == 0
@@ -89,7 +89,7 @@ def test_ideate_cli_with_lowercase_topic() -> None:
     """
     Tests ideate CLI with lowercase topic selection.
     """
-    topic = topics[1]
+    topic = topics[3]
     lowercase_topic = topic.lower()
     result = runner.invoke(app, ["ideate", "--topic", lowercase_topic])
 
@@ -101,7 +101,7 @@ def test_ideate_cli_with_topic_delay() -> None:
     Tests ideate CLI with topic selection and simulated delay.
     """
     os.environ["IDEATE_TEST_MODE"] = "0"
-    topic = topics[1]
+    topic = topics[3]
     start = time.time()
     result = runner.invoke(app, ["ideate", "--topic", topic])
     elapsed = time.time() - start

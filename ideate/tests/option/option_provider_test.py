@@ -18,7 +18,7 @@ def test_autocomplete_topics() -> None:
     """
     Tests autocomplete_topics returns a non-empty list of strings.
     """
-    incomplete = "Tr"
+    incomplete = "Ar"
     topics = autocomplete_topics(incomplete)
 
     assert isinstance(topics, list)
