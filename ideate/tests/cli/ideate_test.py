@@ -64,6 +64,7 @@ def test_ideate_cli_invalid_topic_suggests() -> None:
     Tests ideate CLI with invalid topic prints suggestions.
     """
     result = runner.invoke(app, ["ideate", "--topic", "A"])
+
     assert result.exit_code == 1
     assert "Did you mean: Adventure, Art?" in result.output
 
@@ -72,6 +73,9 @@ def test_ideate_cli_invalid_topic_no_suggestions() -> None:
     Tests ideate CLI with invalid topic prints no suggestions.
     """
     result = runner.invoke(app, ["ideate", "--topic", " "])
+    assert result.exit_code == 1
+    result = runner.invoke(app, ["ideate", "--topic", " "])
+
     assert result.exit_code == 1
     assert "Invalid topic selected." in result.output
 
