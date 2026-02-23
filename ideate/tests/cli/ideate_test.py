@@ -59,6 +59,22 @@ def test_topics_command() -> None:
     for t in topics:
         assert t in result.output
 
+def test_ideate_cli_invalid_topic_suggests() -> None:
+    """
+    Tests ideate CLI with invalid topic prints suggestions.
+    """
+    result = runner.invoke(app, ["ideate", "--topic", "Trave"])
+    assert result.exit_code == 1
+    assert "Did you mean: Travel" in result.output
+
+def test_ideate_cli_invalid_topic_no_suggestions() -> None:
+    """
+    Tests ideate CLI with invalid topic prints no suggestions.
+    """
+    result = runner.invoke(app, ["ideate", "--topic", "Xyz"])
+    assert result.exit_code == 1
+    assert "Invalid topic selected." in result.output
+
 def test_ideate_cli_with_topic() -> None:
     """
     Tests ideate CLI with topic selection.
