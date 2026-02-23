@@ -31,7 +31,11 @@ def ideate(
     canonical_topic = _normalize_topic(topic, topics) if topic else None
 
     if topic and not canonical_topic:
-        typer.echo("Invalid topic selected.")
+        suggestions = autocomplete_topics(topic)
+        if suggestions:
+            typer.echo(f"Invalid topic. Did you mean: {', '.join(suggestions)}?")
+        else:
+            typer.echo("Invalid topic selected.")
         raise typer.Exit(1)
 
     _thinking_delay()

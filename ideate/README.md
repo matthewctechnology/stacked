@@ -29,6 +29,13 @@ source .ideate/bin/activate
 python3 -m pip install -r requirements.txt
 ```
 
+### Install completion
+
+```bash
+# WARN: Misconfigures shell completion with Typer in codespaces
+python3 -m ideate.cli.ideate --install-completion
+```
+
 ### Run CLI
 
 ```bash
