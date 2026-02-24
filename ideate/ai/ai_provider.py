@@ -22,10 +22,10 @@ def get_ai_idea(topic: Optional[str] = None) -> Optional[str]:
     endpoint = "https://models.github.ai/inference"
     model = "openai/gpt-4.1"
     system_message = (
-        "You are a safe creative assistant. "
-        "Generate a novel, viable, and valuable idea"
-        + (f" about {topic}. " if topic else ". ")
-        + "Respond in one concise sentence."
+        f"You are a safe creative {topic.lower() if topic else ''} assistant. "
+        "Generate a novel, viable, and valuable idea. "
+        + "Respond in one clear, concise sentence "
+        + "with about ten to fifteen words."
     )
     user_message = f"Generate a creative idea{f' about {topic}' if topic else ''}."
 
