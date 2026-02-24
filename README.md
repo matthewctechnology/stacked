@@ -31,6 +31,8 @@ Stacked - A Monorepo
 `ideate` tool
 - Python
 - Typer
+- Pydantic
+- OpenAI
 - Pylint
 - Pytest
 

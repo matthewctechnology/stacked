@@ -1,18 +1,19 @@
 """
 CLI entrypoint for ideate tool with simulated thinking delay.
 """
-from typing import List, Optional
-import time
-import random
 import os
+import random
+import time
+from typing import List, Optional
 
 import typer
 
+from ideate.ai.ai_provider import get_ai_idea
 from ideate.fallback.fallback_provider import get_fallback_idea
 from ideate.option.option_provider import autocomplete_topics, get_topics
 
 
-app = typer.Typer(help="ideate Tool - Prints a creative idea.")
+app = typer.Typer(help="ideate Tool - Generates a creative idea.")
 
 @app.command()
 def ideate(
@@ -25,7 +26,7 @@ def ideate(
     ),
 ) -> None:
     """
-    Prints a creative idea, by topic optionally, with a simulated thinking delay.
+    Generates a creative idea, by topic optionally, with a simulated thinking delay.
     """
     topics: List[str] = get_topics()
     canonical_topic = _normalize_topic(topic, topics) if topic else None
@@ -36,11 +37,14 @@ def ideate(
             typer.echo(f"Invalid topic. Did you mean: {', '.join(suggestions)}?")
         else:
             typer.echo("Invalid topic selected.")
+
         raise typer.Exit(1)
 
     _thinking_delay()
 
-    idea: str = get_fallback_idea()
+    idea: Optional[str] = get_ai_idea(canonical_topic)
+    if not idea:
+        idea = get_fallback_idea()
     if canonical_topic:
         typer.echo(f"{canonical_topic} Idea: {idea}")
     else:
@@ -61,10 +65,14 @@ def _normalize_topic(topic: Optional[str], topics: List[str]) -> Optional[str]:
     :return: Optional[str]
     """
     if not topic:
+
         return None
+
     for t in topics:
         if t.lower() == topic.lower():
+
             return t
+
     return None
 
 def _should_skip_delay() -> bool:
