@@ -1,5 +1,5 @@
 """
-Tests for fallback provider.
+Tests ideate fallback provider.
 """
 from ideate.fallback.fallback_provider import get_fallback_idea
 from ideate.fallback.fallback_responses import responses
