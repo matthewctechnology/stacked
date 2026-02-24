@@ -2,22 +2,22 @@
 Provides AI-powered creative idea generation via GitHub Models API.
 """
 import os
-from typing import Optional
+from typing import Optional, Tuple
 
-from openai import OpenAI
+from openai import OpenAI, APIConnectionError, AuthenticationError, BadRequestError, OpenAIError
 
 
-def get_ai_idea(topic: Optional[str] = None) -> Optional[str]:
+def get_ai_idea(topic: Optional[str] = None) -> Tuple[Optional[str], Optional[str], int]:
     """
-    Returns a creative idea from the GitHub Models API, or None on failure.
+    Returns a creative idea from the GitHub Models API, or error and status code.
 
     :param topic: string
-    :return: Optional[str] or None
+    :return: (idea, error, status_code)
     """
     token = os.environ.get("GITHUB_TOKEN")
     if not token:
 
-        return None
+        return None, "server misconfigured", 500
 
     endpoint = "https://models.github.ai/inference"
     model = "openai/gpt-4.1"
@@ -30,11 +30,11 @@ def get_ai_idea(topic: Optional[str] = None) -> Optional[str]:
     user_message = f"Generate a creative idea{f' about {topic}' if topic else ''}."
 
     try:
-        client = OpenAI(
+        openai = OpenAI(
             base_url=endpoint,
             api_key=token,
         )
-        response = client.chat.completions.create(
+        response = openai.chat.completions.create(
             model=model,
             messages=[
                 {"role": "system", "content": system_message},
@@ -48,8 +48,20 @@ def get_ai_idea(topic: Optional[str] = None) -> Optional[str]:
         )
         content = response.choices[0].message.content
 
-        return content.strip() if content else None
+        return content.strip() if content else None, None, 200
 
-    except Exception:  # pylint: disable=broad-except
+    except AuthenticationError:
 
-        return None
+        return None, "authentication failed", 401
+
+    except APIConnectionError:
+
+        return None, "connection error", 502
+
+    except BadRequestError:
+
+        return None, "invalid request", 400
+
+    except OpenAIError as e:
+
+        return None, str(e), 502

@@ -4,6 +4,8 @@ Tests ideate AI provider.
 import os
 from unittest.mock import patch, MagicMock
 
+from openai import OpenAIError
+
 from ideate.ai.ai_provider import get_ai_idea
 
 
@@ -28,27 +30,33 @@ def test_get_ai_idea_success() -> None:
 
     with patch("ideate.ai.ai_provider.OpenAI") as mock_openai:
         mock_openai.return_value.chat.completions.create.return_value = mock_response
-        idea = get_ai_idea("Art")
+        idea, error, status = get_ai_idea("Art")
 
         assert idea == "A sketchbook that encourages practice."
+        assert error is None
+        assert status == 200
 
 def test_get_ai_idea_exception() -> None:
     """
-    Tests ideate get_ai_idea returns None if OpenAI call raises.
+    Tests ideate get_ai_idea returns error and status if OpenAI call raises.
     """
     os.environ["GITHUB_TOKEN"] = "test-token"
     with patch("ideate.ai.ai_provider.OpenAI") as mock_openai:
-        mock_openai.return_value.chat.completions.create.side_effect = Exception("test")
-        idea = get_ai_idea("Art")
+        mock_openai.return_value.chat.completions.create.side_effect = OpenAIError("test")
+        idea, error, status = get_ai_idea("Art")
 
         assert idea is None
+        assert error == "test"
+        assert status == 502
 
 def test_get_ai_idea_no_token() -> None:
     """
-    Tests ideate get_ai_idea returns None if GITHUB_TOKEN is missing.
+    Tests ideate get_ai_idea returns error and status if GITHUB_TOKEN is missing.
     """
     if "GITHUB_TOKEN" in os.environ:
         del os.environ["GITHUB_TOKEN"]
-    idea = get_ai_idea("Art")
+    idea, error, status = get_ai_idea("Art")
 
     assert idea is None
+    assert error == "server misconfigured"
+    assert status == 500

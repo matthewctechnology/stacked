@@ -32,7 +32,7 @@ def test_ideate_cli_ai_primary_with_topic() -> None:
     """
     with patch(
         "ideate.cli.ideate.get_ai_idea",
-        return_value="A sketchbook that encourages practice.",
+        return_value=("A sketchbook that encourages practice.", None, 200),
     ):
         result = runner.invoke(app, ["ideate", "--topic", "Art"])
 
@@ -45,7 +45,7 @@ def test_ideate_cli_ai_primary_no_topic() -> None:
     """
     with patch(
         "ideate.cli.ideate.get_ai_idea",
-        return_value="A sketchbook that encourages practice.",
+        return_value=("A sketchbook that encourages practice.", None, 200),
     ):
         result = runner.invoke(app, ["ideate"])
 
@@ -54,9 +54,12 @@ def test_ideate_cli_ai_primary_no_topic() -> None:
 
 def test_ideate_cli_fallback_secondary_with_topic() -> None:
     """
-    Tests ideate CLI prints fallback idea when AI provider returns None.
+    Tests ideate CLI prints fallback idea when AI provider returns error.
     """
-    with patch("ideate.cli.ideate.get_ai_idea", return_value=None):
+    with patch(
+        "ideate.cli.ideate.get_ai_idea",
+        return_value=(None, "server misconfigured", 500),
+    ):
         topic = topics[3]
         result = runner.invoke(app, ["ideate", "--topic", topic])
 
@@ -66,9 +69,12 @@ def test_ideate_cli_fallback_secondary_with_topic() -> None:
 
 def test_ideate_cli_fallback_secondary_no_topic() -> None:
     """
-    Tests ideate CLI prints fallback idea when AI provider returns None and no topic.
+    Tests ideate CLI prints fallback idea when AI provider returns error and no topic.
     """
-    with patch("ideate.cli.ideate.get_ai_idea", return_value=None):
+    with patch(
+        "ideate.cli.ideate.get_ai_idea",
+        return_value=(None, "server misconfigured", 500),
+    ):
         result = runner.invoke(app, ["ideate"])
 
         assert result.exit_code == 0
@@ -126,7 +132,7 @@ def test_ideate_cli_with_lowercase_topic() -> None:
     lowercase_topic = topic.lower()
     with patch(
         "ideate.cli.ideate.get_ai_idea",
-        return_value="A sketchbook that encourages practice.",
+        return_value=("A sketchbook that encourages practice.", None, 200),
     ):
         result = runner.invoke(app, ["ideate", "--topic", lowercase_topic])
 
@@ -141,7 +147,10 @@ def test_ideate_cli_with_topic_delay() -> None:
 
     topic = topics[3]
     start = time.time()
-    with patch("ideate.cli.ideate.get_ai_idea", return_value=None):
+    with patch(
+        "ideate.cli.ideate.get_ai_idea",
+        return_value=(None, "server misconfigured", 500),
+    ):
         result = runner.invoke(app, ["ideate", "--topic", topic])
     elapsed = time.time() - start
 

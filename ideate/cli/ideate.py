@@ -42,8 +42,9 @@ def ideate(
 
     _thinking_delay()
 
-    idea: Optional[str] = get_ai_idea(canonical_topic)
-    if not idea:
+    idea, error, status = get_ai_idea(canonical_topic)
+    if status != 200 or not idea:
+        _ = error
         idea = get_fallback_idea()
     if canonical_topic:
         typer.echo(f"{canonical_topic} Idea: {idea}")
