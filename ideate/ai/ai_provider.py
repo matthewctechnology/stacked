@@ -40,7 +40,7 @@ def get_ai_idea(topic: Optional[str] = None) -> Optional[str]:
                 {"role": "system", "content": system_message},
                 {"role": "user", "content": user_message},
             ],
-            temperature=0.2,
+            temperature=0.5,
             top_p=1.0,
             max_tokens=64,
             n=1,
