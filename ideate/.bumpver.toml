@@ -1,0 +1,14 @@
+[bumpver]
+current_version = "0.0.0"
+version_pattern = "MAJOR.MINOR.PATCH"
+commit_message = "Version ideate v{new_version}"
+tag_message = "Release ideate v{new_version}"
+tag_name = "v{new_version}"
+files = [
+  "__version__.py",
+]
+
+[bumpver.file_patterns]
+"__version__.py" = [
+  '^__version__ = "{version}"$',
+]
