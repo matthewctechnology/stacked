@@ -80,6 +80,46 @@ def test_ideate_cli_fallback_secondary_no_topic() -> None:
         assert result.exit_code == 0
         assert result.output.strip() in responses
 
+def test_ideate_cli_fallback_option_no_topic() -> None:
+    """
+    Tests ideate CLI prints fallback idea when --fallback is used without topic.
+    """
+    result = runner.invoke(app, ["ideate", "--fallback"])
+
+    assert result.exit_code == 0
+    assert result.output.strip() in responses
+
+def test_ideate_cli_fallback_option_with_topic() -> None:
+    """
+    Tests ideate CLI prints fallback idea with topic when --fallback is used.
+    """
+    topic = topics[1]
+    result = runner.invoke(app, ["ideate", "--fallback", "--topic", topic])
+
+    assert result.exit_code == 0
+    assert result.output.startswith(f"{topic} Idea:")
+    assert any(resp in result.output for resp in responses)
+
+def test_ideate_cli_fallback_short_flag() -> None:
+    """
+    Tests ideate CLI prints fallback idea when -f is used.
+    """
+    result = runner.invoke(app, ["ideate", "-f"])
+
+    assert result.exit_code == 0
+    assert result.output.strip() in responses
+
+def test_ideate_cli_fallback_short_flag_with_topic() -> None:
+    """
+    Tests ideate CLI prints fallback idea with topic when -f -t is used.
+    """
+    topic = topics[2]
+    result = runner.invoke(app, ["ideate", "-f", "-t", topic])
+
+    assert result.exit_code == 0
+    assert result.output.startswith(f"{topic} Idea:")
+    assert any(resp in result.output for resp in responses)
+
 def test_ideate_cli_help() -> None:
     """
     Tests ideate CLI help command.
