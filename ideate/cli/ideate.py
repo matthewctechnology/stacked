@@ -24,6 +24,12 @@ def ideate(
         help="Selects ideation topic.",
         autocompletion=autocomplete_topics,
     ),
+    fallback: bool = typer.Option(
+        False,
+        "--fallback",
+        "-f",
+        help="Forces fallback idea.",
+    ),
 ) -> None:
     """
     Generates a creative idea, by topic optionally, with a simulated thinking delay.
@@ -42,10 +48,13 @@ def ideate(
 
     _thinking_delay()
 
-    idea, error, status = get_ai_idea(canonical_topic)
-    _ = error
-    if status != 200 or not idea:
+    if fallback:
         idea = get_fallback_idea()
+    else:
+        idea, error, status = get_ai_idea(canonical_topic)
+        _ = error
+        if status != 200 or not idea:
+            idea = get_fallback_idea()
     if canonical_topic:
         typer.echo(f"{canonical_topic} Idea: {idea}")
     else:
