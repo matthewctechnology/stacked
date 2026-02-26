@@ -29,7 +29,7 @@ NEW_VERSION=$(npm version "$VERSION_TYPE" --no-git-tag-version | grep -o '[0-9]\
 
 git add package.json package-lock.json
 git commit -m "Version $APP_NAME v$NEW_VERSION"
-git tag "v$NEW_VERSION" -m "Release $APP_NAME v$NEW_VERSION"
+git tag "$APP_NAME-v$NEW_VERSION" -m "Release $APP_NAME v$NEW_VERSION"
 git push origin "$CURRENT_BRANCH:$CURRENT_BRANCH" "v$NEW_VERSION"
 
 popd > /dev/null
