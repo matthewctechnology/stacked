@@ -4,7 +4,7 @@ A command line interface and web application for AI-powered creative idea genera
 
 ## Overview
 
-Ideate allows users to generate creative ideas based on a topic.
+Ideate allows users to generate creative ideas based on optional topic.
 The app is built with Typer, Python, Pydantic, and OpenAI.
 
 ## Features
@@ -29,13 +29,6 @@ source .ideate/bin/activate
 python3 -m pip install -r requirements.txt
 ```
 
-### Install completion
-
-```bash
-# WARN: Misconfigures shell completion with Typer in codespaces
-python3 -m ideate.cli.ideate --install-completion
-```
-
 ### Run CLI
 
 ```bash
@@ -45,6 +38,26 @@ cd /workspaces/stacked
 python3 -m ideate.cli.ideate ideate
 python3 -m ideate.cli.ideate topics
 python3 -m ideate.cli.ideate ideate --topic <topic>
+```
+
+### Install and run CLI Completions
+
+```bash
+# Configures shell completion with Typer
+python3 -m ideate.cli.ideate --install-completion
+exec $SHELL
+python3 -m ideate.cli.ideate --topic Ar<TAB>
+# Removes Typer shell completion installation in codespaces
+sed -i '/fpath+=~\/.zfunc; autoload -Uz compinit; compinit/d' ~/.zshrc
+rm -rf /home/codespace/.zfunc
+```
+
+### Run Dev
+
+```bash
+cd /workspaces/stacked/ideate && source .ideate/bin/activate && cd ..
+python3 -m ideate.cli.ideate ideate --fallback
+python3 -m ideate.cli.ideate ideate -tf <topic>
 ```
 
 ### Run Tests
