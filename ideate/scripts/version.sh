@@ -8,7 +8,7 @@ if [[ "$CURRENT_BRANCH" == "main" ]]; then
 fi
 
 if [[ "$#" -ne 1 ]]; then
-  echo 'Usage: ./scripts/version.sh [patch|minor|major|none]'
+  echo 'Usage: ./scripts/version.sh [patch|minor|major]'
   exit 1
 fi
 
@@ -16,9 +16,8 @@ VERSION_TYPE="$1"
 if [[ "$VERSION_TYPE" != "patch"
   && "$VERSION_TYPE" != "minor"
   && "$VERSION_TYPE" != "major"
-  && "$VERSION_TYPE" != "none"
 ]]; then
-  echo 'Error: Version types: patch, minor, major, none.'
+  echo 'Error: Version types: patch, minor, major.'
   exit 1
 fi
 
@@ -26,15 +25,13 @@ pushd "$(dirname "$0")/.." > /dev/null
 
 APP_NAME=$(pwd | grep -o '[^/]*$')
 
+bumpver update --"$VERSION_TYPE"
+
 NEW_VERSION=$(python3 -c "from __version__ import __version__; print(__version__)")
 
-if [[ "$VERSION_TYPE" != "none" ]]; then
-  bumpver update --"$VERSION_TYPE"
-  NEW_VERSION=$(python3 -c "from __version__ import __version__; print(__version__)")
-  git add __version__.py .bumpver.toml
-  git commit -m "Version $APP_NAME v$NEW_VERSION"
-fi
-git tag "v$NEW_VERSION" -m "Release $APP_NAME v$NEW_VERSION"
+git add __version__.py .bumpver.toml
+git commit -m "Version $APP_NAME v$NEW_VERSION"
+git tag "$APP_NAME-v$NEW_VERSION" -m "Release $APP_NAME v$NEW_VERSION"
 git push origin "$CURRENT_BRANCH:$CURRENT_BRANCH" "v$NEW_VERSION"
 
 popd > /dev/null
