@@ -32,6 +32,6 @@ NEW_VERSION=$(python3 -c "from __version__ import __version__; print(__version__
 git add __version__.py .bumpver.toml
 git commit -m "Version $APP_NAME v$NEW_VERSION"
 git tag "$APP_NAME-v$NEW_VERSION" -m "Release $APP_NAME v$NEW_VERSION"
-git push origin "$CURRENT_BRANCH:$CURRENT_BRANCH" "v$NEW_VERSION"
+git push origin "$CURRENT_BRANCH:$CURRENT_BRANCH" "$APP_NAME-v$NEW_VERSION"
 
 popd > /dev/null
