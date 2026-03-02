@@ -30,11 +30,14 @@ Stacked - A Monorepo
 
 `ideate` tool
 - Python
+- Streamlit
+- FastAPI
 - Typer
 - Pydantic
 - OpenAI
 - Pylint
 - Pytest
+- Playwright
 
 `critique` app
 - TypeScript
