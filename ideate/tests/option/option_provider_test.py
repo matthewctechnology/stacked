@@ -1,7 +1,7 @@
 """
 Tests for topic provider.
 """
-from ideate.option.option_provider import autocomplete_topics, get_topics
+from ideate.option.option_provider import autocomplete_topics, get_topics, normalize_topic
 
 
 def test_get_topics() -> None:
@@ -13,6 +13,16 @@ def test_get_topics() -> None:
     assert isinstance(topics, list)
     assert all(isinstance(t, str) for t in topics)
     assert len(topics) == 36
+
+def test_normalize_topics() -> None:
+    """
+    Tests normalize_topics returns a non-empty list of strings.
+    """
+    topic = "Art"
+    normal_topic = normalize_topic(topic=topic)
+
+    assert isinstance(normal_topic, str)
+    assert all(isinstance(t, str) for t in normal_topic)
 
 def test_autocomplete_topics() -> None:
     """
