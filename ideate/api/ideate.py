@@ -38,30 +38,76 @@ async def ideate(
         <title>ideate - Creative Idea</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <style>
-            body {{
-                background: #18181b;
+            html, body {{
+                min-height: 100vh;
+                margin: 0;
+                padding: 0;
+                font-family: 'Inter', 'Segoe UI', 'Arial', sans-serif;
+                background: #000000;
                 color: #fafafa;
-                font-family: sans-serif;
+            }}
+            .container {{
+                display: grid;
+                grid-template-rows: 20px 1fr 20px;
+                align-items: center;
+                justify-items: center;
+                min-height: 100vh;
+                padding: 32px 32px 80px 32px;
+                gap: 64px;
+            }}
+            @media (min-width: 640px) {{
+                .container {{
+                    padding: 80px 80px 80px 80px;
+                }}
+                .main {{
+                    align-items: flex-start;
+                }}
+            }}
+            .main {{
                 display: flex;
                 flex-direction: column;
+                gap: 32px;
+                grid-row: 2;
                 align-items: center;
-                justify-content: center;
-                height: 100vh;
-                margin: 0;
             }}
             .idea {{
-                background: #27272a;
-                padding: 2rem;
-                border-radius: 1rem;
-                box-shadow: 0 2px 8px #0002;
-                font-size: 1.5rem;
+                background: rgba(255,255,255,1);
+                color: rgba(0,0,0,1);
+                font-family: 'Fira Mono', 'Menlo', 'Monaco', monospace;
+                font-weight: 300;
+                padding: 4px 8px;
+                border-radius: 6px;
+                margin-bottom: 16px;
+                font-size: 1rem;
                 max-width: 600px;
                 text-align: center;
+                box-shadow: 0 2px 8px #0002;
+            }}
+            .footer {{
+                background: rgba(0,0,0,0.05);
+                color: rgba(255,255,255,0.25);
+                font-size: 9px;
+                font-family: 'Fira Mono', 'Menlo', 'Monaco', monospace;
+                font-weight: 300;
+                grid-row: 3;
+                display: flex;
+                gap: 24px;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: center;
+                padding: 2px 0;
             }}
         </style>
     </head>
     <body>
-        <div class="idea">{idea}</div>
+        <div class="container">
+            <main class="main">
+                <div class="idea">{idea}</div>
+            </main>
+            <footer class="footer">
+                <p>unvalidated responses inferred at individual risk</p>
+            </footer>
+        </div>
     </body>
     </html>
     """

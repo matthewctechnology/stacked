@@ -11,18 +11,32 @@ from ideate.fallback.fallback_responses import responses
 
 client = TestClient(app)
 
+def test_ideate_api_returns_disclaimer() -> None:
+    """
+    Tests GET /ideate returns 200 and includes disclaimer in the HTML.
+    """
+    with patch(
+        "ideate.api.ideate.get_ai_idea",
+        return_value=("A sketchbook that encourages practice", None, 200),
+    ):
+        response = client.get("/ideate")
+
+        assert response.status_code == 200
+        assert "unvalidated responses inferred at individual risk" in response.text
+        assert "<html" in response.text
+
 def test_ideate_api_returns_ai_idea() -> None:
     """
     Tests GET /ideate returns 200 and includes AI idea in the HTML.
     """
     with patch(
         "ideate.api.ideate.get_ai_idea",
-        return_value=("A sketchbook that encourages practice.", None, 200),
+        return_value=("A sketchbook that encourages practice", None, 200),
     ):
         response = client.get("/ideate")
 
         assert response.status_code == 200
-        assert "A sketchbook that encourages practice." in response.text
+        assert "A sketchbook that encourages practice" in response.text
         assert "<html" in response.text
 
 def test_ideate_api_returns_ai_idea_with_topic() -> None:
@@ -31,12 +45,12 @@ def test_ideate_api_returns_ai_idea_with_topic() -> None:
     """
     with patch(
         "ideate.api.ideate.get_ai_idea",
-        return_value=("Art Idea: A sketchbook that encourages practice.", None, 200),
+        return_value=("Art Idea: A sketchbook that encourages practice", None, 200),
     ):
         response = client.get("/ideate?topic=art")
 
         assert response.status_code == 200
-        assert "Art Idea: A sketchbook that encourages practice." in response.text
+        assert "Art Idea: A sketchbook that encourages practice" in response.text
         assert "<html" in response.text
 
 def test_ideate_api_returns_fallback_on_ai_error() -> None:
