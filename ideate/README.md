@@ -65,10 +65,14 @@ python3 -m ideate.cli.ideate ideate -tf <topic>
 ```bash
 cd /workspaces/stacked/ideate && source .ideate/bin/activate && cd ..
 uvicorn ideate.api.ideate:app --reload
+curl 'http://localhost:8000/ideate?fallback=True'
+curl 'http://localhost:8000/ideate?fallback=True&topic=<topic>'
 curl 'http://localhost:8000/ideate?topic=<topic>'
 curl 'http://localhost:8000/ideate'
 ```
 
+Browse `https://<codespace>-8000.app.github.dev/ideate?fallback=True`
+Browse `https://<codespace>-8000.app.github.dev/ideate?fallback=True&topic=<topic>`
 Browse `https://<codespace>-8000.app.github.dev/ideate?topic=<topic>`
 Browse `https://<codespace>-8000.app.github.dev/ideate`
 

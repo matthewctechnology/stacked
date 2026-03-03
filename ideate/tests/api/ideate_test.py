@@ -66,3 +66,23 @@ def test_ideate_api_returns_fallback_on_ai_error_with_topic() -> None:
         assert response.status_code == 200
         assert any(idea in response.text for idea in responses)
         assert "<html" in response.text
+
+def test_ideate_api_fallback_query_param() -> None:
+    """
+    Tests GET /ideate?fallback=true returns fallback idea.
+    """
+    response = client.get("/ideate?fallback=true")
+
+    assert response.status_code == 200
+    assert any(idea in response.text for idea in responses)
+    assert "<html" in response.text
+
+def test_ideate_api_fallback_query_param_with_topic() -> None:
+    """
+    Tests GET /ideate?fallback=true returns topical fallback idea.
+    """
+    response = client.get("/ideate?fallback=true&topic=art")
+
+    assert response.status_code == 200
+    assert any(idea in response.text for idea in responses)
+    assert "<html" in response.text

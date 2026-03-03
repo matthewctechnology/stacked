@@ -1,5 +1,5 @@
 """
-FastAPI app for ideate web API, matching CLI logic.
+FastAPI app for ideate web API, matching CLI logic and supporting fallback.
 """
 from fastapi import FastAPI, Response, Query
 from fastapi.responses import HTMLResponse
@@ -12,17 +12,21 @@ from ideate.option.option_provider import normalize_topic
 app = FastAPI()
 
 @app.get("/ideate", response_class=HTMLResponse)
-async def ideate(topic: str = Query(default=None, description="Optional topic")) -> Response:
+async def ideate(
+    topic: str = Query(default=None, description="Optional topic"),
+    fallback: bool = Query(default=False, description="Force fallback idea"),
+) -> Response:
     """
     Serves a basic HTML page with a creative idea, using AI provider with fallback.
     """
     canonical_topic = normalize_topic(topic) if topic else None
 
-    idea, error, status = get_ai_idea(canonical_topic)
-
-    if status != 200 or not idea:
+    if fallback:
         idea = get_fallback_idea()
-
+    else:
+        idea, _, status = get_ai_idea(canonical_topic)
+        if status != 200 or not idea:
+            idea = get_fallback_idea()
     if canonical_topic:
         idea = f"{canonical_topic} Idea: {idea}"
 
@@ -57,7 +61,7 @@ async def ideate(topic: str = Query(default=None, description="Optional topic"))
         </style>
     </head>
     <body>
-        <div class="idea">{idea if idea else error}</div>
+        <div class="idea">{idea}</div>
     </body>
     </html>
     """
