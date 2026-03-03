@@ -71,12 +71,12 @@ curl 'http://localhost:8000/ideate?topic=<topic>'
 curl 'http://localhost:8000/ideate'
 ```
 
-Browse `https://<codespace>-8000.app.github.dev/ideate?fallback=True`
-Browse `https://<codespace>-8000.app.github.dev/ideate?fallback=True&topic=<topic>`
-Browse `https://<codespace>-8000.app.github.dev/ideate?topic=<topic>`
-Browse `https://<codespace>-8000.app.github.dev/ideate`
+- Browse `https://<codespace>-8000.app.github.dev/ideate?fallback=True`
+- Browse `https://<codespace>-8000.app.github.dev/ideate?fallback=True&topic=<topic>`
+- Browse `https://<codespace>-8000.app.github.dev/ideate?topic=<topic>`
+- Browse `https://<codespace>-8000.app.github.dev/ideate`
 
-Browse `https://<codespace>-8000.app.github.dev/docs`
+- Browse `https://<codespace>-8000.app.github.dev/docs`
 
 ### Run Tests
 
