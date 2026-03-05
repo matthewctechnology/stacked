@@ -50,20 +50,6 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-st.markdown(
-    """
-    <style>
-    .main { display: flex; flex-direction: column; align-items: center; gap: 32px; }
-    .idea { background: #fff; color: #111; font-family: 'Fira Mono', monospace; font-weight: 500;
-            padding: 8px 16px; border-radius: 8px; margin-bottom: 16px; font-size: 1.1rem;
-            max-width: 600px; text-align: center; box-shadow: 0 2px 8px #0002; }
-    .footer { background: #222; color: #fff9; font-size: 10px; font-family: 'Fira Mono', monospace;
-              font-weight: 300; padding: 2px 0; margin-top: 24px; text-align: center; }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
 with st.form("idea_form"):
     form_topic = st.selectbox("Topic", [""] + TOPICS, index=0)
     form_fallback = st.checkbox("Force fallback idea")
@@ -76,8 +62,3 @@ if submitted:
         with st.spinner("thinking..."):
             html = get_idea(form_topic, form_fallback)
         st.markdown(html, unsafe_allow_html=True)
-
-st.markdown(
-    "<div class='footer'>unvalidated responses inferred at individual risk</div>",
-    unsafe_allow_html=True,
-)
