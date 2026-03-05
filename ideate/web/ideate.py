@@ -6,6 +6,7 @@ from typing import List
 import requests
 import streamlit as st
 
+
 TOPICS: List[str] = [
     'Adventure', 'Art', 'Business', 'Communication',
     'Community', 'Crafts', 'Culture', 'Design', 'Education', 'Entertainment',
