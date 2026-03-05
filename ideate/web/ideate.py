@@ -1,6 +1,7 @@
 """
 Streamlit web app for ideate tool.
 """
+import time
 from typing import List
 
 import requests
@@ -60,5 +61,6 @@ if submitted:
         st.error("Invalid topic selected. Please choose from the list.")
     else:
         with st.spinner("thinking..."):
+            time.sleep(1)
             html = get_idea(form_topic, form_fallback)
         st.markdown(html, unsafe_allow_html=True)
