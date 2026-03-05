@@ -85,7 +85,7 @@ cd /workspaces/stacked/ideate && source .ideate/bin/activate
 streamlit run web/ideate.py
 ```
 
-- Browse `https://<codespace>-8051.app.github.dev/ideate`
+- Browse `https://<codespace>-8501.app.github.dev/ideate`
 
 
 ### Run Tests
