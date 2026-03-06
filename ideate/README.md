@@ -5,14 +5,14 @@ A command line interface and web application for AI-powered creative idea genera
 ## Overview
 
 Ideate allows users to generate creative ideas based on optional topic.
-The app is built with Python, FastAPI, Typer, Pydantic, and OpenAI.
+The app is built with Streamlit, Python, FastAPI, Typer, Pydantic, and OpenAI.
 
 ## Features
 
 - Modern, clean UI in dark mode
 - Secure input and interaction
 - Hybrid AI/static fallback for reliability
-- Fully tested with Pylint and Pytest
+- Fully tested with Pylint, Pytest, and Playwright
 
 ## Full Start
 
@@ -78,11 +78,21 @@ curl 'http://localhost:8000/ideate'
 
 - Browse `https://<codespace>-8000.app.github.dev/docs`
 
+### Run Web:
+
+```bash
+cd /workspaces/stacked/ideate && source .ideate/bin/activate
+streamlit run web/ideate.py
+```
+
+- Browse `https://<codespace>-8501.app.github.dev/ideate`
+
+
 ### Run Tests
 
 ```bash
 cd /workspaces/stacked/ideate
-pylint ideate tests && pytest tests
+pylint ideate && pytest tests
 ```
 
 ## Security

@@ -47,17 +47,14 @@ async def ideate(
                 color: #fafafa;
             }}
             .container {{
-                display: grid;
-                grid-template-rows: 20px 1fr 20px;
+                # display: grid;
                 align-items: center;
                 justify-items: center;
-                min-height: 100vh;
-                padding: 32px 32px 80px 32px;
-                gap: 64px;
+                padding: 32px 32px 32px 32px;
             }}
             @media (min-width: 640px) {{
                 .container {{
-                    padding: 80px 80px 80px 80px;
+                    padding: 32px 32px 32px 32px;
                 }}
                 .main {{
                     align-items: flex-start;

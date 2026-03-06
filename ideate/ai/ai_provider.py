@@ -40,7 +40,7 @@ def get_ai_idea(topic: Optional[str] = None) -> Tuple[Optional[str], Optional[st
                 {"role": "system", "content": system_message},
                 {"role": "user", "content": user_message},
             ],
-            temperature=0.5,
+            temperature=0.8,
             top_p=1.0,
             max_tokens=64,
             n=1,

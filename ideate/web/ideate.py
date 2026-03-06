@@ -1,0 +1,69 @@
+"""
+Streamlit web app for ideate tool.
+"""
+import time
+from typing import List
+
+import requests
+import streamlit as st
+
+
+TOPICS: List[str] = [
+    'Adventure', 'Art', 'Business', 'Communication',
+    'Community', 'Crafts', 'Culture', 'Design', 'Education', 'Entertainment',
+    'Environment', 'Fashion', 'Finance', 'Fitness', 'Food', 'Gardening', 'Health',
+    'History', 'Home', 'Innovation', 'Learning', 'Mindfulness', 'Music', 'Nature',
+    'Parenting', 'Pets', 'Photography', 'Productivity', 'Science', 'Social', 'Sports',
+    'Sustainability', 'Technology', 'Travel', 'Wellness', 'Writing',
+]
+
+API_URL = "http://localhost:8000/ideate"
+
+def get_idea(topic: str = "", fallback: bool = False) -> str:
+    """
+    Requests idea from FastAPI endpoint.
+    """
+    params = {}
+    if topic:
+        params["topic"] = topic
+    if fallback:
+        params["fallback"] = "true"
+    try:
+        resp = requests.get(API_URL, params=params, timeout=10)
+        resp.raise_for_status()
+
+        return resp.text
+
+    except requests.HTTPError:
+
+        return "<div class='idea'>Error: (A)I have no idea.</div>"
+
+def validate_topic(topic: str = "") -> bool:
+    """
+    Validates topic against allowed topics.
+    """
+
+    return topic in TOPICS
+
+st.set_page_config(
+    page_title="ideate - Creative Idea Generator",
+    layout="centered",
+    initial_sidebar_state="collapsed",
+)
+
+form_topic = st.selectbox(
+    "Topic",
+    [""] + TOPICS,
+    index=0,
+)
+form_fallback = st.checkbox("Force fallback idea")
+submitted = st.button("Get Idea")
+
+if submitted:
+    if form_topic and not validate_topic(form_topic):
+        st.error("Invalid topic selected. Please choose from the list.")
+    else:
+        with st.spinner("thinking..."):
+            time.sleep(1)
+            html = get_idea(form_topic, form_fallback)
+        st.markdown(html, unsafe_allow_html=True)
