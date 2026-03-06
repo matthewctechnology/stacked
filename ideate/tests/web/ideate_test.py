@@ -1,6 +1,8 @@
 """
 Unit tests for ideate Streamlit web topic validation.
 """
+import os
+
 from streamlit.testing.v1 import AppTest
 
 from ideate.option.topics import topics
@@ -28,7 +30,11 @@ def test_streamlit_ui_elements() -> None:
     """
     Tests Streamlit UI elements are present.
     """
-    at = AppTest.from_file("~/stacked/ideate/web/ideate.py").run()
+    streamlit_file = "/home/runner/work/stacked/stacked/ideate/web/ideate.py"
+    if "workspaces" in os.getcwd():
+        streamlit_file = "/workspaces/stacked/ideate/web/ideate.py"
+
+    at = AppTest.from_file(streamlit_file).run()
 
     assert at.selectbox[0].options == [""] + sorted(topics)
     assert at.checkbox[0].label == "Force fallback idea"
