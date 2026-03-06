@@ -18,7 +18,7 @@ def test_streamlit_idea_page_e2e_with_fallback() -> None:
         checkbox = page.wait_for_selector("text=Force fallback idea")
 
         assert checkbox
-        checkbox.check(force=True, timeout=30000)
+        checkbox.click(timeout=3000)
 
         page.click("text=Get Idea", timeout=3000)
 
@@ -46,12 +46,12 @@ def test_streamlit_idea_page_e2e_with_topic_fallback() -> None:
 
         assert selectbox
         selectbox.type("Art")
-        selectbox.press(key="Enter",timeout=3000)
+        selectbox.press(key="Enter", timeout=3000)
 
         checkbox = page.wait_for_selector("text=Force fallback idea")
 
         assert checkbox
-        checkbox.check(force=True, timeout=30000)
+        checkbox.click(timeout=3000)
 
         page.click("text=Get Idea", timeout=3000)
 
