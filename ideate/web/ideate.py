@@ -51,10 +51,13 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-with st.form("idea_form"):
-    form_topic = st.selectbox("Topic", [""] + TOPICS, index=0)
-    form_fallback = st.checkbox("Force fallback idea")
-    submitted = st.form_submit_button("Get Idea")
+form_topic = st.selectbox(
+    "Topic",
+    [""] + TOPICS,
+    index=0,
+)
+form_fallback = st.checkbox("Force fallback idea")
+submitted = st.button("Get Idea")
 
 if submitted:
     if form_topic and not validate_topic(form_topic):
